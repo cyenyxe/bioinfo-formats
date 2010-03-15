@@ -2,9 +2,6 @@ package org.bioinfo.formats.io.reader;
 
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 import org.bioinfo.formats.core.feature.Bed;
 import org.junit.Test;
 
@@ -26,14 +23,14 @@ public class BedReaderTest {
 	public void testNext() {
 		BedReader br;
 		try {
-			br = new BedReader("/tmp/snps.bed");
+			br = new BedReader("/mnt/commons/test/biodata/example/snps.bed");
 			Bed b = br.next();
 			System.out.println(b.toString());
 			b = br.next();
 			System.out.println(b.toString());
 		} catch (Exception e) {
-			System.out.println(e.toString());
 			e.printStackTrace();
+			fail(e.toString());
 		}
 		
 	}
