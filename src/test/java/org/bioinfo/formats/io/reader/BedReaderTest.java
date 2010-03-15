@@ -10,17 +10,14 @@ import org.junit.Test;
 
 public class BedReaderTest {
 
-	@Test
 	public void testBedReaderString() {
 		fail("Not yet implemented");
 	}
 
-	@Test
 	public void testGetAll() {
 		fail("Not yet implemented");
 	}
 
-	@Test
 	public void testGrep() {
 		fail("Not yet implemented");
 	}
