@@ -6,7 +6,7 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -150,7 +150,7 @@ import javax.xml.bind.annotation.XmlType;
     "attributeList"
 })
 @XmlSeeAlso({
-    org.bioinfo.formats.io.parser.psimi.jaxb.EntrySet.Entry.InteractionList.Interaction.class
+    org.bioinfo.formats.io.parser.psi.v25jaxb.EntrySet.Entry.InteractionList.Interaction.class
 })
 public class InteractionElementType {
 

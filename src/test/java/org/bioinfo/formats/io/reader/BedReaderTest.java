@@ -24,9 +24,9 @@ public class BedReaderTest {
 		BedReader br;
 		try {
 			br = new BedReader("/mnt/commons/test/biodata/example/snps.bed");
-			Bed b = br.next();
+			Bed b = br.read();
 			System.out.println(b.toString());
-			b = br.next();
+			b = br.read();
 			System.out.println(b.toString());
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -6,7 +6,7 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,25 +16,19 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * A confidence value.
+ * Reference to an external controlled vocabulary.
  * 
- * <p>Java class for confidenceType complex type.
+ * <p>Java class for cvType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="confidenceType">
+ * &lt;complexType name="cvType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="unit" type="{net:sf:psidev:mi}openCvType"/>
- *         &lt;element name="value">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;minLength value="1"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
+ *         &lt;element name="names" type="{net:sf:psidev:mi}namesType"/>
+ *         &lt;element name="xref" type="{net:sf:psidev:mi}xrefType"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -44,66 +38,68 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "confidenceType", propOrder = {
-    "unit",
-    "value"
+@XmlType(name = "cvType", propOrder = {
+    "names",
+    "xref"
 })
 @XmlSeeAlso({
-    org.bioinfo.formats.io.parser.psimi.jaxb.ConfidenceListType.Confidence.class
+    org.bioinfo.formats.io.parser.psi.v25jaxb.ParticipantType.ParticipantIdentificationMethodList.ParticipantIdentificationMethod.class,
+    org.bioinfo.formats.io.parser.psi.v25jaxb.ParticipantType.ExperimentalRoleList.ExperimentalRole.class,
+    org.bioinfo.formats.io.parser.psi.v25jaxb.ParticipantType.ExperimentalPreparationList.ExperimentalPreparation.class
 })
-public class ConfidenceType {
+public class CvType {
 
     @XmlElement(required = true)
-    protected OpenCvType unit;
+    protected NamesType names;
     @XmlElement(required = true)
-    protected String value;
+    protected XrefType xref;
 
     /**
-     * Gets the value of the unit property.
+     * Gets the value of the names property.
      * 
      * @return
      *     possible object is
-     *     {@link OpenCvType }
+     *     {@link NamesType }
      *     
      */
-    public OpenCvType getUnit() {
-        return unit;
+    public NamesType getNames() {
+        return names;
     }
 
     /**
-     * Sets the value of the unit property.
+     * Sets the value of the names property.
      * 
      * @param value
      *     allowed object is
-     *     {@link OpenCvType }
+     *     {@link NamesType }
      *     
      */
-    public void setUnit(OpenCvType value) {
-        this.unit = value;
+    public void setNames(NamesType value) {
+        this.names = value;
     }
 
     /**
-     * Gets the value of the value property.
+     * Gets the value of the xref property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link XrefType }
      *     
      */
-    public String getValue() {
-        return value;
+    public XrefType getXref() {
+        return xref;
     }
 
     /**
-     * Sets the value of the value property.
+     * Sets the value of the xref property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link XrefType }
      *     
      */
-    public void setValue(String value) {
-        this.value = value;
+    public void setXref(XrefType value) {
+        this.xref = value;
     }
 
 }

@@ -6,4 +6,4 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "net:sf:psidev:mi", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
