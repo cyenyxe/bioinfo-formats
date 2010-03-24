@@ -6,7 +6,7 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,14 +15,14 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * A short alphanumeric label identifying an object. Not necessarily unique.
+ * Full, descriptive object name.
  * 
- * <p>Java class for labelType complex type.
+ * <p>Java class for fullNameType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="labelType">
+ * &lt;complexType name="fullNameType">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *     &lt;/extension>
@@ -33,10 +33,10 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "labelType", propOrder = {
+@XmlType(name = "fullNameType", propOrder = {
     "value"
 })
-public class LabelType {
+public class FullNameType {
 
     @XmlValue
     protected String value;

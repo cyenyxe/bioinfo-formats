@@ -6,7 +6,7 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -17,18 +17,15 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * A interval on a sequence.
- * 
- * <p>Java class for intervalType complex type.
+ * <p>Java class for positionType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="intervalType">
+ * &lt;complexType name="positionType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="begin" use="required" type="{http://www.w3.org/2001/XMLSchema}unsignedLong" />
- *       &lt;attribute name="end" use="required" type="{http://www.w3.org/2001/XMLSchema}unsignedLong" />
+ *       &lt;attribute name="position" use="required" type="{http://www.w3.org/2001/XMLSchema}unsignedLong" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -37,62 +34,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "intervalType")
-public class IntervalType {
+@XmlType(name = "positionType")
+public class PositionType {
 
     @XmlAttribute(required = true)
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger begin;
-    @XmlAttribute(required = true)
-    @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger end;
+    protected BigInteger position;
 
     /**
-     * Gets the value of the begin property.
+     * Gets the value of the position property.
      * 
      * @return
      *     possible object is
      *     {@link BigInteger }
      *     
      */
-    public BigInteger getBegin() {
-        return begin;
+    public BigInteger getPosition() {
+        return position;
     }
 
     /**
-     * Sets the value of the begin property.
+     * Sets the value of the position property.
      * 
      * @param value
      *     allowed object is
      *     {@link BigInteger }
      *     
      */
-    public void setBegin(BigInteger value) {
-        this.begin = value;
-    }
-
-    /**
-     * Gets the value of the end property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getEnd() {
-        return end;
-    }
-
-    /**
-     * Sets the value of the end property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setEnd(BigInteger value) {
-        this.end = value;
+    public void setPosition(BigInteger value) {
+        this.position = value;
     }
 
 }

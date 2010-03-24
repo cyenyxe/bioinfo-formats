@@ -1,4 +1,4 @@
-package org.bioinfo.formats.io.parser.psimi;
+package org.bioinfo.formats.io.parser.psi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,13 +11,13 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 
-public class PsiMiParser {
+public class PsiParser {
 
-	private final static String PSIMI_CONTEXT = "org.bioinfo.formats.io.parser.psimi.jaxb";
+	private final static String PSI25_CONTEXT = "org.bioinfo.formats.io.parser.psi.v25jaxb";
 	
 	public static void saveXMLInfo(Object obj, String filename) throws FileNotFoundException, JAXBException {
 		JAXBContext jaxbContext;
-		jaxbContext = JAXBContext.newInstance(PSIMI_CONTEXT);
+		jaxbContext = JAXBContext.newInstance(PSI25_CONTEXT);
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		marshaller.marshal(obj, new FileOutputStream(filename));	
 	}
@@ -29,7 +29,7 @@ public class PsiMiParser {
 	 */
 	public static Object loadXMLInfo(String filename) throws JAXBException {
 		Object obj = null;
-		JAXBContext jaxbContext = JAXBContext.newInstance(PSIMI_CONTEXT);
+		JAXBContext jaxbContext = JAXBContext.newInstance(PSI25_CONTEXT);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		obj =  unmarshaller.unmarshal(new File(filename));
 		return obj;

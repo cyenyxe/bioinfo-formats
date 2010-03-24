@@ -6,7 +6,7 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -68,8 +68,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "parameterType")
 @XmlSeeAlso({
-    org.bioinfo.formats.io.parser.psimi.jaxb.InteractionElementType.ParameterList.Parameter.class,
-    org.bioinfo.formats.io.parser.psimi.jaxb.ParticipantType.ParameterList.Parameter.class
+    org.bioinfo.formats.io.parser.psi.v25jaxb.InteractionElementType.ParameterList.Parameter.class,
+    org.bioinfo.formats.io.parser.psi.v25jaxb.ParticipantType.ParameterList.Parameter.class
 })
 public class ParameterType {
 

@@ -6,55 +6,42 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * Names for an object.
+ * A list of additional attributes. Open tag-value list to allow the inclusion of additional data.
  * 
- * <p>Java class for namesType complex type.
+ * <p>Java class for attributeListType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="namesType">
+ * &lt;complexType name="attributeListType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="shortLabel" minOccurs="0">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;minLength value="1"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="fullName" minOccurs="0">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;minLength value="1"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="alias" maxOccurs="unbounded" minOccurs="0">
+ *         &lt;element name="attribute" maxOccurs="unbounded">
  *           &lt;complexType>
  *             &lt;simpleContent>
  *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                 &lt;attribute name="typeAc">
+ *                 &lt;attribute name="name" use="required">
  *                   &lt;simpleType>
  *                     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *                       &lt;minLength value="1"/>
  *                     &lt;/restriction>
  *                   &lt;/simpleType>
  *                 &lt;/attribute>
- *                 &lt;attribute name="type">
+ *                 &lt;attribute name="nameAc">
  *                   &lt;simpleType>
  *                     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *                       &lt;minLength value="1"/>
@@ -74,92 +61,41 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "namesType", propOrder = {
-    "shortLabel",
-    "fullName",
-    "alias"
+@XmlType(name = "attributeListType", propOrder = {
+    "attribute"
 })
-public class NamesType {
+public class AttributeListType {
 
-    protected String shortLabel;
-    protected String fullName;
-    protected List<NamesType.Alias> alias;
-
-    /**
-     * Gets the value of the shortLabel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getShortLabel() {
-        return shortLabel;
-    }
+    @XmlElement(required = true)
+    protected List<AttributeListType.Attribute> attribute;
 
     /**
-     * Sets the value of the shortLabel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setShortLabel(String value) {
-        this.shortLabel = value;
-    }
-
-    /**
-     * Gets the value of the fullName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFullName() {
-        return fullName;
-    }
-
-    /**
-     * Sets the value of the fullName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFullName(String value) {
-        this.fullName = value;
-    }
-
-    /**
-     * Gets the value of the alias property.
+     * Gets the value of the attribute property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the alias property.
+     * This is why there is not a <CODE>set</CODE> method for the attribute property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getAlias().add(newItem);
+     *    getAttribute().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link NamesType.Alias }
+     * {@link AttributeListType.Attribute }
      * 
      * 
      */
-    public List<NamesType.Alias> getAlias() {
-        if (alias == null) {
-            alias = new ArrayList<NamesType.Alias>();
+    public List<AttributeListType.Attribute> getAttribute() {
+        if (attribute == null) {
+            attribute = new ArrayList<AttributeListType.Attribute>();
         }
-        return this.alias;
+        return this.attribute;
     }
 
 
@@ -172,14 +108,14 @@ public class NamesType {
      * &lt;complexType>
      *   &lt;simpleContent>
      *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
-     *       &lt;attribute name="typeAc">
+     *       &lt;attribute name="name" use="required">
      *         &lt;simpleType>
      *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
      *             &lt;minLength value="1"/>
      *           &lt;/restriction>
      *         &lt;/simpleType>
      *       &lt;/attribute>
-     *       &lt;attribute name="type">
+     *       &lt;attribute name="nameAc">
      *         &lt;simpleType>
      *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
      *             &lt;minLength value="1"/>
@@ -197,14 +133,14 @@ public class NamesType {
     @XmlType(name = "", propOrder = {
         "value"
     })
-    public static class Alias {
+    public static class Attribute {
 
         @XmlValue
         protected String value;
+        @XmlAttribute(required = true)
+        protected String name;
         @XmlAttribute
-        protected String typeAc;
-        @XmlAttribute
-        protected String type;
+        protected String nameAc;
 
         /**
          * Gets the value of the value property.
@@ -231,51 +167,51 @@ public class NamesType {
         }
 
         /**
-         * Gets the value of the typeAc property.
+         * Gets the value of the name property.
          * 
          * @return
          *     possible object is
          *     {@link String }
          *     
          */
-        public String getTypeAc() {
-            return typeAc;
+        public String getName() {
+            return name;
         }
 
         /**
-         * Sets the value of the typeAc property.
+         * Sets the value of the name property.
          * 
          * @param value
          *     allowed object is
          *     {@link String }
          *     
          */
-        public void setTypeAc(String value) {
-            this.typeAc = value;
+        public void setName(String value) {
+            this.name = value;
         }
 
         /**
-         * Gets the value of the type property.
+         * Gets the value of the nameAc property.
          * 
          * @return
          *     possible object is
          *     {@link String }
          *     
          */
-        public String getType() {
-            return type;
+        public String getNameAc() {
+            return nameAc;
         }
 
         /**
-         * Sets the value of the type property.
+         * Sets the value of the nameAc property.
          * 
          * @param value
          *     allowed object is
          *     {@link String }
          *     
          */
-        public void setType(String value) {
-            this.type = value;
+        public void setNameAc(String value) {
+            this.nameAc = value;
         }
 
     }

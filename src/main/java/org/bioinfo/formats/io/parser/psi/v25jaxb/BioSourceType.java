@@ -6,7 +6,7 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -48,9 +48,9 @@ import javax.xml.bind.annotation.XmlType;
     "tissue"
 })
 @XmlSeeAlso({
-    org.bioinfo.formats.io.parser.psimi.jaxb.ExperimentType.HostOrganismList.HostOrganism.class,
-    org.bioinfo.formats.io.parser.psimi.jaxb.InteractorElementType.Organism.class,
-    org.bioinfo.formats.io.parser.psimi.jaxb.ParticipantType.HostOrganismList.HostOrganism.class
+    org.bioinfo.formats.io.parser.psi.v25jaxb.ExperimentType.HostOrganismList.HostOrganism.class,
+    org.bioinfo.formats.io.parser.psi.v25jaxb.InteractorElementType.Organism.class,
+    org.bioinfo.formats.io.parser.psi.v25jaxb.ParticipantType.HostOrganismList.HostOrganism.class
 })
 public class BioSourceType {
 

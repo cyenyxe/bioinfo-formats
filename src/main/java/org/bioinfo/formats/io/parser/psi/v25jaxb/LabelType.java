@@ -6,27 +6,25 @@
 //
 
 
-package org.bioinfo.formats.io.parser.psimi.jaxb;
+package org.bioinfo.formats.io.parser.psi.v25jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * A text describing the availability of data, e.g. a copyright statement.
+ * A short alphanumeric label identifying an object. Not necessarily unique.
  * 
- * <p>Java class for availabilityType complex type.
+ * <p>Java class for labelType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="availabilityType">
+ * &lt;complexType name="labelType">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -35,15 +33,13 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "availabilityType", propOrder = {
+@XmlType(name = "labelType", propOrder = {
     "value"
 })
-public class AvailabilityType {
+public class LabelType {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(required = true)
-    protected int id;
 
     /**
      * Gets the value of the value property.
@@ -67,22 +63,6 @@ public class AvailabilityType {
      */
     public void setValue(String value) {
         this.value = value;
-    }
-
-    /**
-     * Gets the value of the id property.
-     * 
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     */
-    public void setId(int value) {
-        this.id = value;
     }
 
 }
