@@ -5,7 +5,7 @@ package org.bioinfo.formats.core.feature;
  * @author parce
  *
  */
-public class Sequence {
+public class Fasta {
 	
 	/** Sequence ID */
 	private String id;
@@ -14,12 +14,12 @@ public class Sequence {
 	private String description;
 	
 	/** Sequence */
-	private String seq;
+	private String sequence;
 
-	public Sequence(String id, String description, String seq) {
+	public Fasta(String id, String description, String sequence) {
 		this.id = id;
 		this.description = description;
-		this.seq = seq;
+		this.sequence = sequence;
 	}
 
 	public String getId() {
@@ -51,20 +51,22 @@ public class Sequence {
 	 * @return
 	 */
 	public String getSeq() {
-		return seq;
+		return sequence;
 	}
 
 	/**
 	 * @param seq
 	 */
 	public void setSeq(String seq) {
-		this.seq = seq;
+		this.sequence = seq;
 	}
 
 	@Override
 	public String toString() {
-		return "Sequence [id=" + id + ", description=" + description + ", seq="
-				+ seq + "]";
+		StringBuilder sb =  new StringBuilder("Fasta Id=" + this.id);
+		sb.append("\nDescription=" + this.description);
+		sb.append("\nSequence=" + this.sequence);
+		return (sb.toString());
 	}
 
 

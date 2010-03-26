@@ -12,7 +12,7 @@ public abstract class AbstractFormatReader<T> {
 	protected File file;
 	
 	protected AbstractFormatReader(File f) throws IOException {
-		FileUtils.checkFile(file);
+		FileUtils.checkFile(f);
 		this.file = f;
 	}
 	
@@ -20,11 +20,11 @@ public abstract class AbstractFormatReader<T> {
 	
 	public abstract T read(String regexFilter) throws FileFormatException;
 	
-	public abstract List<T> readAll();
+	public abstract List<T> readAll() throws FileFormatException;
 	
-	public abstract List<T> readAll(String regexFilter);
+	public abstract List<T> readAll(String regexFilter) throws FileFormatException;
 	
-	public abstract int size() throws IOException;
+	public abstract int size() throws IOException, FileFormatException;
 	
 	public abstract void close() throws IOException;
 	

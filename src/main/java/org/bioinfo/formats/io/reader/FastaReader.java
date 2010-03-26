@@ -1,27 +1,72 @@
 package org.bioinfo.formats.io.reader;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.bioinfo.commons.io.TextFileReader;
-import org.bioinfo.formats.core.feature.Sequence;
+import org.bioinfo.formats.core.feature.Fasta;
 import org.bioinfo.formats.io.exception.FileFormatException;
 
-public class FastaReader extends SequenceReader {
-	
+public class FastaReader extends AbstractFormatReader<Fasta> {
+
 	private TextFileReader fileReader;
-	
+
 	private static final String seqIdChar = ">";
-	
-	private String lastLineReaded = null;
-	
-	private String fastaFileName = null;
-	
-	public FastaReader (String fileName) throws FileNotFoundException{
-		this.fileReader = new TextFileReader(fileName);
-		this.fastaFileName = fileName;
+
+	private String lastLineRead = null;
+
+	private boolean endOfFileReached = false;
+
+	public FastaReader(String fileName) throws IOException{
+		this(new File(fileName));
 	}
+
+	public FastaReader(File file) throws IOException {
+		super(file);
+		this.fileReader = new TextFileReader(file.getAbsolutePath());
+	}
+
+
+	@Override
+	public Fasta read() throws FileFormatException {
+		Fasta fasta = null;	
+
+		if (!this.endOfFileReached){
+			try {
+				// Read Id and Desc
+				String idLine = this.readIdLine();
+				String id = idLine.split("\\s")[0].substring(1);
+				String desc = idLine.substring(id.length()+1);
+
+				// Read Sequence
+				StringBuilder sequenceBuilder = this.readSequenceLines();
+
+				// Build Fasta object
+				fasta = new Fasta(id, desc.trim(), sequenceBuilder.toString().trim());
+
+			}catch (IOException ex){
+				throw new FileFormatException(ex);
+			}
+		}
+
+		return fasta;
+	}
+
+	@Override
+	public int size() throws IOException {
+		int size = 0;
+		String line;
+		while ((line = this.fileReader.readLine()) != null){
+			if (line.startsWith(FastaReader.seqIdChar)){
+				size ++;
+			}
+		}
+		return size;
+	}
+
 
 	@Override
 	public void close() throws IOException {
@@ -30,68 +75,115 @@ public class FastaReader extends SequenceReader {
 	}
 
 	@Override
-	public List<Sequence> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Sequence> grep(String filter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Sequence next() throws FileFormatException {
-		Sequence sequence = null;
-		try {
-			// If no previous sequences have been readed, 
-			// we read the first(s) line(s)
-			String idLine = null;
-			if (this.lastLineReaded!=null){
-				idLine = this.lastLineReaded;
-			}else{
-				// (1)TODO: Quizas haya que leer varias lineas hasta llegar a la primera secuencia
-				idLine = this.fileReader.readLine();
+	public Fasta read(String regexFilter) throws FileFormatException {
+		Fasta seq = this.read();
+		boolean found = false;
+		
+		while (!found && seq != null){
+			if (seq.getId().matches(regexFilter)){
+				found = true;
+			} else {
+				seq = this.read();
 			}
-			
-			// Leemos el ID y Descripcion
-			// TODO: quizás la comprobación es innecesaria. Depende de (1)
-			String id = null;
-			String desc = null;
-			if (idLine.startsWith(FastaReader.seqIdChar)){
-				// TODO: Leer ID y descripcion si existe
-			}else{
-				throw new FileFormatException("Incorrect sequence ID: "+idLine);
-			}
-			
-			// Leemos la sencuencia:
-			String seq = null;
-			String line = this.fileReader.readLine();
-			while (!line.startsWith(FastaReader.seqIdChar)){
-				// TODO: Probar rendimiento de StringBuffer(StringBuilder) y String
-				seq = seq + line;				
-			}
-			this.lastLineReaded = line;
-			
-			// creamos la secuencia a partir de los atributos que hemos obtenido
-			sequence = new Sequence(id,desc,seq);
-			
-		}catch (IOException ex){
-			throw new FileFormatException(ex);
 		}
-		return sequence;
+		return seq;
 	}
 
 	@Override
-	public int size() {
-		try {
-			TextFileReader reader = new TextFileReader(this.fastaFileName);
-			//List ids = reader.
-		}catch (){
-			
+	public List<Fasta> readAll() throws FileFormatException {
+		List<Fasta> fastaList = new LinkedList<Fasta>();
+
+		Fasta fasta;
+		while ((fasta = this.read()) != null){
+			fastaList.add(fasta);
 		}
-		return 0;
+
+		return fastaList;		
 	}
 
+	@Override
+	public List<Fasta> readAll(String regexFilter) throws FileFormatException {
+		List<Fasta> fastaList = new LinkedList<Fasta>();
+
+		Fasta fasta;
+		while ((fasta = this.read(regexFilter)) != null){
+			fastaList.add(fasta);
+		}
+
+		return fastaList;
+	}
+
+	/*
+	private Fasta auxRead() throws IOException {
+		Fasta f = null;
+		String line = "";
+		StringBuilder sb = new StringBuilder();
+		while((line = fileReader.readLine()) != null) {
+			if(!line.trim().equals("") ) {
+				if(line.startsWith(">")) {
+					if(f != null) {
+						String [] fields = line.split("\\s");
+						f = new Fasta(fields[0].substring(1), fields[1] ,"");
+					}else {
+						this.lastLineRead = line;
+						break;
+					}
+				}else {
+					sb.append(line);
+				}
+				break;
+			}
+		}
+		if(f != null){
+			f.setSeq(sb.toString());
+		}
+		return f;
+	}
+	 */
+
+
+	private String readIdLine() throws  FileFormatException,IOException {
+		String idLine;
+		// If no previous sequences have been read, read the first(s) line(s)		
+		if (this.lastLineRead == null){
+			// TODO: Comprobar si hay lineas de basura antes de la primera secuencia,
+			//		 en lugar de lanzar una excepcion directamente
+			idLine = this.fileReader.readLine();
+			if (!idLine.startsWith(FastaReader.seqIdChar)){
+				throw new FileFormatException("Incorrect ID Line: "+idLine);				
+			}
+		} else {
+			idLine = this.lastLineRead;
+		}	
+		return idLine;
+	}
+
+
+
+	private StringBuilder readSequenceLines() throws FileFormatException, IOException {
+		// read the sequence letters
+		StringBuilder sequenceBuilder = new StringBuilder();
+		String line = this.fileReader.readLine();
+		while (line != null && !line.startsWith(FastaReader.seqIdChar)){
+			// check the sequence format and throws a FileFormatException if it's wrong 
+			checkSequence(line);
+			sequenceBuilder.append(line);
+			line = this.fileReader.readLine();
+		}
+
+		// Check if we have reached a new sequence or the end of file 
+		if (line !=null){
+			this.lastLineRead = line;
+		} else {
+			this.endOfFileReached = true;
+		}
+
+		return sequenceBuilder;
+	}
+
+	private void checkSequence(String sequence) throws FileFormatException {
+		// Por ahora no hacemos comprobacion alguna y nos creemos que la secuencia viene bien
+	}
+	
+	
 }
