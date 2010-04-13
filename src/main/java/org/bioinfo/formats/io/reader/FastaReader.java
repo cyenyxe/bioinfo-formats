@@ -14,7 +14,7 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 
 	private TextFileReader fileReader;
 
-	private static final String seqIdChar = ">";
+	private static final String SEQ_ID_CHAR = ">";
 
 	private String lastLineRead = null;
 
@@ -60,7 +60,7 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 		int size = 0;
 		String line;
 		while ((line = this.fileReader.readLine()) != null){
-			if (line.startsWith(FastaReader.seqIdChar)){
+			if (line.startsWith(FastaReader.SEQ_ID_CHAR)){
 				size ++;
 			}
 		}
@@ -78,7 +78,6 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 	public Fasta read(String regexFilter) throws FileFormatException {
 		Fasta seq = this.read();
 		boolean found = false;
-		
 		while (!found && seq != null){
 			if (seq.getId().matches(regexFilter)){
 				found = true;
@@ -149,7 +148,7 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 			// TODO: Comprobar si hay lineas de basura antes de la primera secuencia,
 			//		 en lugar de lanzar una excepcion directamente
 			idLine = this.fileReader.readLine();
-			if (!idLine.startsWith(FastaReader.seqIdChar)){
+			if (!idLine.startsWith(FastaReader.SEQ_ID_CHAR)){
 				throw new FileFormatException("Incorrect ID Line: "+idLine);				
 			}
 		} else {
@@ -158,13 +157,11 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 		return idLine;
 	}
 
-
-
 	private StringBuilder readSequenceLines() throws FileFormatException, IOException {
 		// read the sequence letters
 		StringBuilder sequenceBuilder = new StringBuilder();
 		String line = this.fileReader.readLine();
-		while (line != null && !line.startsWith(FastaReader.seqIdChar)){
+		while (line != null && !line.startsWith(FastaReader.SEQ_ID_CHAR)){
 			// check the sequence format and throws a FileFormatException if it's wrong 
 			checkSequence(line);
 			sequenceBuilder.append(line);

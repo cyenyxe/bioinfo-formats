@@ -31,7 +31,7 @@ public class FastaReaderTest {
 	@Test
 	public void testClose() {
 		try {
-			FastaReader fr = new FastaReader("/home/parce/fastas/hg19.fa");
+			FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/sequences_exact_200000_100_20.fa");
 			fr.close();
 			System.out.println("FastaReader.close: File closed");
 		} catch (Exception e) {
@@ -46,7 +46,6 @@ public class FastaReaderTest {
 		try {
 			//FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/e_coli_O157_H7.fna");
 			FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/sequences_exact_200000_100_20.fa");
-			//FastaReader fr = new FastaReader("/home/parce/fastas/hg19.fa");
 			Fasta f;
 			int n = 0;
 			while((f = fr.read()) != null) {
@@ -71,7 +70,7 @@ public class FastaReaderTest {
 			Fasta f;
 			int n = 0;
 			while((f = fr.read(regExp)) != null) {
-				//System.out.println(f.toString());
+				System.out.println(f.toString());
 				n++;
 			}
 			System.out.println("FastaReader.ReadString: " + n + " sequences whose Id matches regular Expresion '" + regExp + "'");
@@ -88,7 +87,6 @@ public class FastaReaderTest {
 		try {
 			//FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/e_coli_O157_H7.fna");
 			FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/sequences_exact_200000_100_20.fa");
-			//FastaReader fr = new FastaReader("/home/parce/fastas/hg19.fa");
 			List<Fasta> fastaList = fr.readAll();
 			System.out.println("FastaReader.ReadAll: "+fastaList.size()+" sequences read");
 			fr.close();

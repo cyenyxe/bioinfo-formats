@@ -6,7 +6,7 @@ public class FastaQ extends Fasta {
 	private String quality;
 	
 	/** Vector contanining integer qualities */
-	private int[] qualityInt;
+	private int[] qualityIntVector;
 	
 	/** Average quality of the sequence */
 	private double averageQuality;
@@ -21,17 +21,21 @@ public class FastaQ extends Fasta {
 	private int format;
 	
 	/** Constant representing SANGER FORMAT */
-	private static final int SANGER_FORMAT = 0;
+	public static final int SANGER_FORMAT = 0;
 	
 	/** Constant representing ILLUMINA FORMAT */
-	private static final int ILLUMINA_FORMAT = 1;
+	public static final int ILLUMINA_FORMAT = 1;
 	
 	/** Constant representing SOLEXA FORMAT */
-	private static final int SOLEXA_FORMAT = 2;	
+	public static final int SOLEXA_FORMAT = 2;	
 	
-	private static final char[] scaleFirstChar = {'!','@',';'};
+	private static final char[] SCALE_FIRST_CHAR = {'!','@',';'};
 	
-	private static final int[] scaleFirstInt = {0,0,-5};
+	private static final int[] SCALE_FIRST_INT = {0, 0, -5};
+	
+	private static final String SEQ_ID_CHAR = "@";
+	
+	private static final String QUALITY_ID_CHAR = "+";	
 	
 	public FastaQ(String id, String description, String sequence, String quality) {
 		this(id, description, sequence, quality, FastaQ.SANGER_FORMAT);
@@ -76,32 +80,48 @@ public class FastaQ extends Fasta {
 		this.minimumQuality = minimumQuality;
 	}	
 	
-	public String toString(){
-		StringBuilder sb = new StringBuilder(super.toString());
-		sb.append("\nQuality="+this.quality);
-		return sb.toString();
-		// TODO: Mostrar tambien calidades
+	public int[] getQualityIntVector(){
+		return this.qualityIntVector;
 	}
 	
+	public String toString(){
+		StringBuilder sb =  new StringBuilder(this.SEQ_ID_CHAR + this.id);
+		sb.append(" " + this.description + "\n");
+		
+		// Split and append the sequence in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
+		int n = 0;
+		while (this.size() > ((n+1)*this.SEQ_OUTPUT_MAX_LENGTH)) {
+			sb.append((this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH, (n+1) * this.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+			n ++;
+		}
+		sb.append(this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH) + "\n");			
+
+		// Split and append the quality in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
+		sb.append(this.QUALITY_ID_CHAR + "\n");
+		n = 0;
+		while (this.size() > ((n+1)*this.SEQ_OUTPUT_MAX_LENGTH)) {
+			sb.append((this.quality.substring(n * this.SEQ_OUTPUT_MAX_LENGTH, (n+1) * this.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+			n ++;
+		}		
+		sb.append(this.quality.substring(n * this.SEQ_OUTPUT_MAX_LENGTH));	
+
+		return (sb.toString());		
+	}
 	
 	private void convertQuality(){
 		int total = 0;
-		// TODO: adaptar esta guarreria de maximos y minimos a los diferentes formatos
-		this.maximumQuality = 0;
-		this.minimumQuality = 93;
-		qualityInt = new int[this.quality.length()];
+		
+		this.maximumQuality = Integer.MIN_VALUE;
+		this.minimumQuality = Integer.MAX_VALUE;
+		// TODO: comentar
+		qualityIntVector = new int[this.quality.length()];
 		for (int i=0; i<this.quality.length(); i++){
 			char c = this.quality.charAt(i);
-			qualityInt[i] = c - this.scaleFirstChar[this.format] + this.scaleFirstInt[this.format];
-			total += this.qualityInt[i];
-//			if (this.qualityInt[i] > this.maximumQuality) {
-//				this.maximumQuality = this.qualityInt[i];
-//			}
-			this.maximumQuality = Math.max(this.qualityInt[i], this.maximumQuality);
-//			if (this.qualityInt[i] < this.minimumQuality) {
-//				this.minimumQuality = this.qualityInt[i];
-//			}
-			this.minimumQuality = Math.min(this.qualityInt[i], this.minimumQuality);
+			qualityIntVector[i] = c - this.SCALE_FIRST_CHAR[this.format] + this.SCALE_FIRST_INT[this.format];
+			total += this.qualityIntVector[i];
+
+			this.maximumQuality = Math.max(this.qualityIntVector[i], this.maximumQuality);
+			this.minimumQuality = Math.min(this.qualityIntVector[i], this.minimumQuality);
 		}
 		this.averageQuality = (double)total / this.quality.length();
 	}

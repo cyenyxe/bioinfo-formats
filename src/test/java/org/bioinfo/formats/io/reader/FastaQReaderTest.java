@@ -15,7 +15,7 @@ public class FastaQReaderTest {
 	@Test
 	public void testSize() {
 		try {
-			FastaQReader fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
+			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
 			int size = fqr.size();
 			System.out.println("FastaQReader.size: This file contains " + size + " sequences");
 			fqr.close();
@@ -39,18 +39,88 @@ public class FastaQReaderTest {
 		}
 	}
 	
+//	@Ignore
+//	@Test
+//	public void testQualityLengthRelationship() {
+//		try {
+//			FastaQReader fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
+//			FastaQ fq;
+//			int minLength = Integer.MAX_VALUE;
+//			int maxLength = 0;
+//			while((fq = fqr.read()) != null) {
+//				minLength = Math.min(minLength, fq.size());
+//				maxLength = Math.max(maxLength, fq.size());				
+//			}
+//			System.out.println("Minimum Sequence Length: " + minLength);
+//			System.out.println("Maximum Sequence Length: " + maxLength);
+//			fqr.close();
+//			
+//			double[][] arrayLongitudes = new double[maxLength-minLength+1][2]; 
+//			fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
+//			while((fq = fqr.read()) != null) {
+//				arrayLongitudes[fq.size()-minLength][0] += fq.getAverageQuality();
+//				arrayLongitudes[fq.size()-minLength][1]++;
+//			}
+//			fqr.close();
+//			
+//			//TextFileWriter fw = new TextFileWriter("/home/parce/fastas/longitudes_SRR006041.txt");
+//			for (int i=0;i<(maxLength-minLength);i++){
+//				System.out.println(arrayLongitudes[i][0]/arrayLongitudes[i][1]);
+//			}
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			fail(e.toString());
+//		}
+//		
+//	}
+	
+	@Ignore
+	@Test
+	public void testQualityLengthRelationship() {
+		try {
+			// Obtain the maximum length
+			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/pruebaformatoincorrecto.fq");			
 
+			FastaQ fq;
+			int maxLength = 0;
+			while((fq = fqr.read()) != null) {
+				maxLength = Math.max(maxLength, fq.size());				
+			}
+			System.out.println("Maximum Sequence Length: " + maxLength);
+			fqr.close();
+			
+			double[][] qualitiesPositionedArray = new double[maxLength][2]; 
+			fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/pruebaformatoincorrecto.fq");				
+			while((fq = fqr.read()) != null) {
+				int[] qv = fq.getQualityIntVector();
+				for (int i=0; i < qv.length; i++){
+					qualitiesPositionedArray[i][0] += qv[i];
+					qualitiesPositionedArray[i][1]++;					
+				}
+			}
+			fqr.close();
+			
+			TextFileWriter fw = new TextFileWriter("/mnt/commons/test/biodata/fasta/CalidadesPorPosicion2.txt");
+			for (int i=0;i<maxLength;i++){
+				System.out.println(qualitiesPositionedArray[i][0]/qualitiesPositionedArray[i][1]);
+				fw.writeLine("" + (qualitiesPositionedArray[i][0]/qualitiesPositionedArray[i][1]));
+			}
+			fw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.toString());
+		}
+		
+	}	
+	
+	@Ignore
 	@Test
 	public void testRead() {
 		try {
 			long ini = System.currentTimeMillis();
-			FastaQReader fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/1000seqSanger.fq");
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/pruebaCalidades");
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/e_coli_10000snp.fq");	
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/e_coli_1000_1.fq");
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/e_coli_1000_2.fq");
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/e_coli_1000.fq");	
+			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
 			FastaQ fq;
 			int n = 0;
 			long totalQuality = 0;
@@ -58,21 +128,17 @@ public class FastaQReaderTest {
 			double minAverageQuality = 93;
 			int maxQuality = 0;
 			int minQuality = 93;
+			int minLength = Integer.MAX_VALUE;
+			int maxLength = 0;
 			while((fq = fqr.read()) != null) {
 				//System.out.println(fq.toString());
 				totalQuality += fq.getAverageQuality();
-				if (fq.getAverageQuality() > maxAverageQuality) {
-					maxAverageQuality = fq.getAverageQuality();
-				}
-				if (fq.getAverageQuality() < minAverageQuality) {
-					minAverageQuality = fq.getAverageQuality();
-				}		
-				if (fq.getMaximumQuality() > maxQuality) {
-					maxQuality = fq.getMaximumQuality();
-				}
-				if (fq.getMinimumQuality() < minQuality) {
-					minQuality = fq.getMinimumQuality();
-				}	
+				maxAverageQuality = Math.max(maxAverageQuality, fq.getAverageQuality());
+				minAverageQuality = Math.min(minAverageQuality, fq.getAverageQuality());	
+				maxQuality = Math.max(maxQuality, fq.getMaximumQuality());
+				minQuality = Math.min(minQuality, fq.getMinimumQuality());
+				minLength = Math.min(minLength, fq.size());
+				maxLength = Math.max(maxLength, fq.size());				
 				n++;
 			}
 			long end = System.currentTimeMillis();
@@ -81,7 +147,9 @@ public class FastaQReaderTest {
 			System.out.println("Maximum Average Quality: " + maxAverageQuality);
 			System.out.println("Minimum Average Quality: " + minAverageQuality);	
 			System.out.println("Absolute Maximum quality: " + maxQuality);
-			System.out.println("Absolute Minimum quality: " + minQuality);			
+			System.out.println("Absolute Minimum quality: " + minQuality);	
+			System.out.println("Minimum Sequence Length: " + minLength);
+			System.out.println("Maximum Sequence Length: " + maxLength);				
 			System.out.println("Time elapsed: " + ((end - ini)/ 1000) + " seconds");
 			fqr.close();
 		} catch (Exception e) {
@@ -90,11 +158,11 @@ public class FastaQReaderTest {
 		}
 	}
 	
-	@Ignore	
+	@Ignore
 	@Test
 	public void testReadString() {
 		try {
-			FastaQReader fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
+			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
 			String regExp = "SRR006041.5[0-9]{1}";
 			
 			FastaQ fq;
@@ -115,7 +183,6 @@ public class FastaQReaderTest {
 	@Test
 	public void testReadAll() {
 		try {
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
 			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/e_coli_10000snp.fq");
 			List<FastaQ> FastaQList = fqr.readAll();
 			System.out.println("FastaQReader.ReadAll: "+FastaQList.size()+" sequences read");
@@ -157,7 +224,7 @@ public class FastaQReaderTest {
 	@Test
 	public void testReadWithMinimalAverageQuality() {
 		try {
-			FastaQReader fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
+			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
 			
 			FastaQ fq;
 			int minimum = 38;
@@ -174,21 +241,25 @@ public class FastaQReaderTest {
 		}		
 	}
 	
+
 	@Ignore
 	@Test
 	public void escribeCalidadesAFichero(){
 		try {
 			long ini = System.currentTimeMillis();
-			FastaQReader fqr = new FastaQReader("/home/parce/fastas/SRR006041.filt.fastq");
-			TextFileWriter fw = new TextFileWriter("/home/parce/fastas/calidades_SRR006041.txt");
-			//FastaQReader fqr = new FastaQReader("/home/parce/fastas/1000seqSanger.fq");
+			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
+			TextFileWriter fw = new TextFileWriter("/mnt/commons/test/biodata/fasta/longitudes_SRR006041.txt");
+			
 			FastaQ fq;
 			int n = 0;
-			double averageQuality;
+			//double averageQuality;
+			int length;
 			while((fq = fqr.read()) != null) {
 				//System.out.println(fq.toString());
-				averageQuality = fq.getAverageQuality();
-				fw.writeLine(""+averageQuality);
+//				averageQuality = fq.getAverageQuality();
+//				fw.writeLine(""+averageQuality);
+				length = fq.size();
+				fw.writeLine(""+length);
 				n++;
 			}
 			long end = System.currentTimeMillis();
