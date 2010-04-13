@@ -7,6 +7,8 @@ import java.util.List;
 import org.bioinfo.commons.io.utils.FileUtils;
 import org.bioinfo.formats.io.exception.FileFormatException;
 
+//TODO: Esta clase quizas sea innecesaria, pues podemos usar el TextFileWriter y el toString del formato
+// 		que queramos guardar en fichero
 public abstract class AbstractFormatWriter<T> {
 	
 	protected File file;

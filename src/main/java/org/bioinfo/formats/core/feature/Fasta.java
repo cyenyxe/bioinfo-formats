@@ -8,13 +8,17 @@ package org.bioinfo.formats.core.feature;
 public class Fasta {
 	
 	/** Sequence ID */
-	private String id;
+	protected String id;
 	
 	/** Sequence description */
-	private String description;
-	
+	protected String description;
+		
 	/** Sequence */
-	private String sequence;
+	protected String sequence;
+	
+	private static final String SEQ_ID_CHAR = ">";
+	
+	protected static final int SEQ_OUTPUT_MAX_LENGTH = 60;
 
 	public Fasta(String id, String description, String sequence) {
 		this.id = id;
@@ -60,12 +64,23 @@ public class Fasta {
 	public void setSeq(String seq) {
 		this.sequence = seq;
 	}
+	
+	public int size(){
+		return this.sequence.length();
+	}
 
 	@Override
 	public String toString() {
-		StringBuilder sb =  new StringBuilder("Fasta Id=" + this.id);
-		sb.append("\nDescription=" + this.description);
-		sb.append("\nSequence=" + this.sequence);
+		StringBuilder sb =  new StringBuilder(this.SEQ_ID_CHAR + this.id);
+		sb.append(" " + this.description + "\n");
+		// Split and append the sequence in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
+		int n = 0;
+		while (this.size() > ((n+1)*this.SEQ_OUTPUT_MAX_LENGTH)) {
+			sb.append((this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH, (n+1) * this.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+			n ++;
+		}
+		sb.append(this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH));	
+		
 		return (sb.toString());
 	}
 

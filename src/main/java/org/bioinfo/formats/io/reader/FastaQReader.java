@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.bioinfo.commons.io.TextFileReader;
+import org.bioinfo.commons.log.Logger;
 import org.bioinfo.formats.core.feature.Fasta;
 import org.bioinfo.formats.core.feature.FastaQ;
 import org.bioinfo.formats.io.exception.FileFormatException;
@@ -14,18 +15,29 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	
 	private TextFileReader fileReader;
 	
-	private static final String seqIdChar = "@";
+	private static final String SEQ_ID_CHAR = "@";
 	
-	private static final String qualityStartLineChar = "+";
+	private static final String QUALITY_ID_CHAR = "+";
+	
+	private int format;
+	
+	public FastaQReader(String fileName, int format) throws IOException {
+		this(new File(fileName), format);
+	}	
 	
 	public FastaQReader(String fileName) throws IOException{
 		this(new File(fileName));
 	}
 
 	public FastaQReader(File file) throws IOException {
+		this(file, FastaQ.SANGER_FORMAT);
+	}	
+	
+	public FastaQReader(File file, int format) throws IOException {
 		super(file);
 		this.fileReader = new TextFileReader(file.getAbsolutePath());
-	}	
+		this.format = format;
+	}		
 
 	@Override
 	public void close() throws IOException {
@@ -80,7 +92,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 				this.checkQualitySize(id, sequence, quality);
 	
 				// Build Fasta object
-				fasta = new FastaQ(id, desc.trim(), sequence, quality);
+				fasta = new FastaQ(id, desc.trim(), sequence, quality, this.format);
 			}
 		}catch (IOException ex){
 			throw new FileFormatException(ex);
@@ -101,7 +113,6 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	public FastaQ read(String regexFilter) throws FileFormatException {
 		FastaQ seq = this.read();
 		boolean found = false;
-		
 		while (!found && seq != null){
 			if (seq.getId().matches(regexFilter)){
 				found = true;
@@ -118,7 +129,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 		// TODO: Comprobar si hay lineas de basura antes de la primera secuencia,
 		//		 en lugar de lanzar una excepcion directamente
 		idLine = this.fileReader.readLine();
-		if ((idLine != null) && !idLine.startsWith(FastaQReader.seqIdChar)){
+		if ((idLine != null) && !idLine.startsWith(FastaQReader.SEQ_ID_CHAR)){
 			throw new FileFormatException("Incorrect ID Line: "+idLine);				
 		}
 
@@ -129,7 +140,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 		int numSequenceLines = 0;
 		// read the sequence letters
 		String line = this.fileReader.readLine();
-		while (line != null && !line.startsWith(FastaQReader.qualityStartLineChar)){
+		while (line != null && !line.startsWith(FastaQReader.QUALITY_ID_CHAR)){
 			// check the sequence format and throws a FileFormatException if it's wrong 
 			checkSequence(line);
 			sequenceBuilder.append(line);
