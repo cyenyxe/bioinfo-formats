@@ -54,6 +54,7 @@ public class FastaQ extends Fasta {
 
 	public void setQuality(String quality) {
 		this.quality = quality;
+		this.convertQuality();
 	}
 	
 	public double getAverageQuality() {
