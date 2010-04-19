@@ -14,7 +14,8 @@ public abstract class AbstractFormatWriter<T> {
 	protected File file;
 	
 	protected AbstractFormatWriter(File f) throws IOException {
-		// TODO: ¿chequear si creamos un archivo nuevo o nos cepillamos uno o que?
+		// TODO: ¿chequear el archivo? Si no existe dará una excepcion, y quizas queremos
+		// 		 crearlo en lugar de que falle
 		//FileUtils.checkFile(f);
 		this.file = f;
 	}	

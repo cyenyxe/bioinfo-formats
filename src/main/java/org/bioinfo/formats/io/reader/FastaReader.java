@@ -112,35 +112,6 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 		return fastaList;
 	}
 
-	/*
-	private Fasta auxRead() throws IOException {
-		Fasta f = null;
-		String line = "";
-		StringBuilder sb = new StringBuilder();
-		while((line = fileReader.readLine()) != null) {
-			if(!line.trim().equals("") ) {
-				if(line.startsWith(">")) {
-					if(f != null) {
-						String [] fields = line.split("\\s");
-						f = new Fasta(fields[0].substring(1), fields[1] ,"");
-					}else {
-						this.lastLineRead = line;
-						break;
-					}
-				}else {
-					sb.append(line);
-				}
-				break;
-			}
-		}
-		if(f != null){
-			f.setSeq(sb.toString());
-		}
-		return f;
-	}
-	 */
-
-
 	private String readIdLine() throws  FileFormatException,IOException {
 		String idLine;
 		// If no previous sequences have been read, read the first(s) line(s)		
