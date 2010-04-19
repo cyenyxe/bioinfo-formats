@@ -27,14 +27,18 @@ public class FastaQ extends Fasta {
 	public static final int ILLUMINA_FORMAT = 1;
 	
 	/** Constant representing SOLEXA FORMAT */
-	public static final int SOLEXA_FORMAT = 2;	
+	public static final int SOLEesXA_FORMAT = 2;	
 	
+	/** First char in the different quality scales */
 	private static final char[] SCALE_FIRST_CHAR = {'!','@',';'};
 	
+	/** First value in the different quality scales */
 	private static final int[] SCALE_FIRST_INT = {0, 0, -5};
 	
+	/** Sequence ID Line first char */
 	private static final String SEQ_ID_CHAR = "@";
 	
+	/** Quality ID line first char */
 	private static final String QUALITY_ID_CHAR = "+";	
 	
 	public FastaQ(String id, String description, String sequence, String quality) {
@@ -54,6 +58,7 @@ public class FastaQ extends Fasta {
 
 	public void setQuality(String quality) {
 		this.quality = quality;
+		this.convertQuality();
 	}
 	
 	public double getAverageQuality() {
@@ -108,13 +113,19 @@ public class FastaQ extends Fasta {
 		return (sb.toString());		
 	}
 	
+	/**
+	 * This method transform the quality char sequence into a int vector, and calculate
+	 * sequence's average quality and maximum and minimum individual quality scores 
+	 */
 	private void convertQuality(){
 		int total = 0;
-		
 		this.maximumQuality = Integer.MIN_VALUE;
 		this.minimumQuality = Integer.MAX_VALUE;
-		// TODO: comentar
+		// quality int array initialization
 		qualityIntVector = new int[this.quality.length()];
+		
+		// Transform each character in the quality String into a integer, depending on 
+		// the quality scale, and obtain the average, minimum and maximum values
 		for (int i=0; i<this.quality.length(); i++){
 			char c = this.quality.charAt(i);
 			qualityIntVector[i] = c - this.SCALE_FIRST_CHAR[this.format] + this.SCALE_FIRST_INT[this.format];
@@ -126,4 +137,33 @@ public class FastaQ extends Fasta {
 		this.averageQuality = (double)total / this.quality.length();
 	}
 
+	/**
+	 * Trim the sequence's tail, if it is longer than a determined size
+	 * @param maxSize - Maximum size allowed
+	 */
+	public void trimSequenceTail (int maxSize){
+		// Trim sequence and quality strings
+		this.setSeq(this.sequence.substring(0, maxSize));
+		this.setQuality(this.quality.substring(0, maxSize));
+	}
+	
+	/**
+	 * Returns the average quality of the last elements of the sequence
+	 * @param numElements - Number of elements whose quality will be returned
+	 * @return - Average quality of the last elements of the sequence
+	 */
+	public float getSequenceTailAverageQuality(int numElements){
+		float quality = -1;
+		if (this.size() >= numElements){
+			// Sum the quality of the last 'n' elements of the sequence, 
+			// and divide the result by 'n' to obtain the average value 
+			int totalTailQuality = 0;
+			for (int i=1; i <= numElements; i++){
+				totalTailQuality += this.qualityIntVector[this.size()-i];
+			}
+			quality = totalTailQuality / numElements;
+		}
+		return quality;
+	}	
+	
 }

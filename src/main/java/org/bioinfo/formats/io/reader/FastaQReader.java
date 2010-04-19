@@ -138,7 +138,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	
 	private int readSequenceLines(StringBuilder sequenceBuilder) throws FileFormatException, IOException {
 		int numSequenceLines = 0;
-		// read the sequence letters
+		// read the sequence string
 		String line = this.fileReader.readLine();
 		while (line != null && !line.startsWith(FastaQReader.QUALITY_ID_CHAR)){
 			// check the sequence format and throws a FileFormatException if it's wrong 
@@ -169,7 +169,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	}
 
 	
-	// TODO: Cambiar nombre al metodo
+	@Deprecated
 	public FastaQ readWithMinimalAverageQuality(int minimal) throws FileFormatException {
 		FastaQ seq = this.read();
 		boolean found = false;
@@ -192,10 +192,17 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 		// TODO: Por ahora no hacemos comprobacion alguna y nos creemos que la secuencia viene bien
 	}		
 	
+	/**
+	 * Check that the sequence and quality strings have the same length
+	 * @param id - FastQ id
+	 * @param sequence - FastaQ sequence string
+	 * @param quality - FastQ quality string
+	 * @throws FileFormatException - If the sequence and quality strings have different lengths
+	 */
 	private void checkQualitySize(String id, String sequence, String quality) throws FileFormatException {
 		if (sequence.length() != quality.length()){
 			throw new FileFormatException("Quality and Sequence lenghts are different in Fasta " + id);			
 		}
-	}			
+	}
 	
 }
