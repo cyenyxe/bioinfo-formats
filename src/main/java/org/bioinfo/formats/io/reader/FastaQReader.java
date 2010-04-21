@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.bioinfo.commons.io.TextFileReader;
-import org.bioinfo.commons.log.Logger;
-import org.bioinfo.formats.core.feature.Fasta;
 import org.bioinfo.formats.core.feature.FastaQ;
 import org.bioinfo.formats.io.exception.FileFormatException;
 
@@ -166,22 +164,6 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 		}		
 		
 		return qualityBuilder;
-	}
-
-	
-	@Deprecated
-	public FastaQ readWithMinimalAverageQuality(int minimal) throws FileFormatException {
-		FastaQ seq = this.read();
-		boolean found = false;
-		
-		while (!found && seq != null){
-			if (seq.getAverageQuality() >= minimal){
-				found = true;
-			} else {
-				seq = this.read();
-			}
-		}
-		return seq;
 	}
 
 	private void checkSequence(String sequence) throws FileFormatException {

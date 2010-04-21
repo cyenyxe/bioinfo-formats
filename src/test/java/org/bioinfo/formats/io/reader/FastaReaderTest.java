@@ -3,10 +3,7 @@ package org.bioinfo.formats.io.reader;
 import static org.junit.Assert.*;
 
 import java.util.List;
-import java.io.IOException;
-import java.util.LinkedList;
 
-import org.bioinfo.commons.io.TextFileReader;
 import org.bioinfo.formats.core.feature.Fasta;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -44,12 +41,10 @@ public class FastaReaderTest {
 	@Test
 	public void testRead() {
 		try {
-			//FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/e_coli_O157_H7.fna");
 			FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/sequences_exact_200000_100_20.fa");
 			Fasta f;
 			int n = 0;
 			while((f = fr.read()) != null) {
-				//System.out.println(f.toString());
 				n++;
 			}
 			System.out.println("FastaReader.Read: " + n + " sequences read");
@@ -85,7 +80,6 @@ public class FastaReaderTest {
 	@Test
 	public void testReadAll() {
 		try {
-			//FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/e_coli_O157_H7.fna");
 			FastaReader fr = new FastaReader("/mnt/commons/test/biodata/example/sequences_exact_200000_100_20.fa");
 			List<Fasta> fastaList = fr.readAll();
 			System.out.println("FastaReader.ReadAll: "+fastaList.size()+" sequences read");

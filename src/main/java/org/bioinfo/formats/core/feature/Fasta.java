@@ -71,15 +71,15 @@ public class Fasta {
 
 	@Override
 	public String toString() {
-		StringBuilder sb =  new StringBuilder(this.SEQ_ID_CHAR + this.id);
+		StringBuilder sb =  new StringBuilder(Fasta.SEQ_ID_CHAR + this.id);
 		sb.append(" " + this.description + "\n");
 		// Split and append the sequence in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
 		int n = 0;
-		while (this.size() > ((n+1)*this.SEQ_OUTPUT_MAX_LENGTH)) {
-			sb.append((this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH, (n+1) * this.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+		while (this.size() > ((n+1)*Fasta.SEQ_OUTPUT_MAX_LENGTH)) {
+			sb.append((this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
 			n ++;
 		}
-		sb.append(this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH));	
+		sb.append(this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH));	
 		
 		return (sb.toString());
 	}

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.bioinfo.commons.io.TextFileReader;
 import org.bioinfo.formats.core.feature.Fasta;

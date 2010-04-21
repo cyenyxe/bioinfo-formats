@@ -1,12 +1,15 @@
 package org.bioinfo.formats.core.feature;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FastaQ extends Fasta {
 
 	/** Sequence quality */
 	private String quality;
 	
-	/** Vector contanining integer qualities */
-	private int[] qualityIntVector;
+	/** Vector contanining PHRED or Solexa (depending on the format) quality scores */
+	private int[] qualityScoresArray;
 	
 	/** Average quality of the sequence */
 	private double averageQuality;
@@ -27,13 +30,19 @@ public class FastaQ extends Fasta {
 	public static final int ILLUMINA_FORMAT = 1;
 	
 	/** Constant representing SOLEXA FORMAT */
-	public static final int SOLEesXA_FORMAT = 2;	
+	public static final int SOLEXA_FORMAT = 2;	
 	
 	/** First char in the different quality scales */
-	private static final char[] SCALE_FIRST_CHAR = {'!','@',';'};
+	private static final char[] SCALE_OFFSET = {33, 64, 64};	
 	
-	/** First value in the different quality scales */
-	private static final int[] SCALE_FIRST_INT = {0, 0, -5};
+	/** Constant representing PHRED score type */
+	private static final int PHRED_SCORE_TYPE = 0;
+	
+	/** Constant representing Solexa score type */	
+	private static final int SOLEXA_SCORE_TYPE = 1;
+	
+	/** Score type corresponding to each scale */
+	private static final int[] SCALE_SCORE = {FastaQ.PHRED_SCORE_TYPE, FastaQ.PHRED_SCORE_TYPE, FastaQ.SOLEXA_SCORE_TYPE};
 	
 	/** Sequence ID Line first char */
 	private static final String SEQ_ID_CHAR = "@";
@@ -41,15 +50,53 @@ public class FastaQ extends Fasta {
 	/** Quality ID line first char */
 	private static final String QUALITY_ID_CHAR = "+";	
 	
+	/** Solexa to Phred Score Map */ 
+	private static Map<Integer,Integer> solexaToPhredMap;
+	
+	/** Phred to Solexa Score Map */ 
+	private static Map<Integer,Integer> phredToSolexaMap;
+	
+	static{
+		// Solexa To Phred Score Map Initialization
+		solexaToPhredMap = new HashMap<Integer,Integer>();
+		solexaToPhredMap.put(-5, 1);
+		solexaToPhredMap.put(-4, 1);
+		solexaToPhredMap.put(-3, 2);
+		solexaToPhredMap.put(-2, 2);
+		solexaToPhredMap.put(-1, 3);
+		solexaToPhredMap.put(0, 3);
+		solexaToPhredMap.put(1, 4);
+		solexaToPhredMap.put(2, 4);
+		solexaToPhredMap.put(3, 5);
+		solexaToPhredMap.put(4, 5);
+		solexaToPhredMap.put(5, 6);	
+		solexaToPhredMap.put(6, 7);
+		solexaToPhredMap.put(7, 8);
+		solexaToPhredMap.put(8, 9);
+		solexaToPhredMap.put(9, 10);		
+
+		// PHRED To Solexa Score Map Initialization
+		phredToSolexaMap = new HashMap<Integer,Integer>();
+		phredToSolexaMap.put(0, -5);
+		phredToSolexaMap.put(1, -5);
+		phredToSolexaMap.put(2, -2);
+		phredToSolexaMap.put(3, 0);
+		phredToSolexaMap.put(4, 2);
+		phredToSolexaMap.put(5, 3);	
+		phredToSolexaMap.put(6, 5);
+		phredToSolexaMap.put(7, 6);
+		phredToSolexaMap.put(8, 7);
+		phredToSolexaMap.put(9, 8);		
+	}
+	
 	public FastaQ(String id, String description, String sequence, String quality) {
 		this(id, description, sequence, quality, FastaQ.SANGER_FORMAT);
 	}
 	
 	public FastaQ(String id, String description, String sequence, String quality, int format) {
 		super(id, description, sequence);		
-		this.quality = quality;		
 		this.format = format;
-		this.convertQuality();
+		this.setQuality(quality);
 	}	
 
 	public String getQuality() {
@@ -58,7 +105,7 @@ public class FastaQ extends Fasta {
 
 	public void setQuality(String quality) {
 		this.quality = quality;
-		this.convertQuality();
+		this.obtainQualityScores();
 	}
 	
 	public double getAverageQuality() {
@@ -85,56 +132,117 @@ public class FastaQ extends Fasta {
 		this.minimumQuality = minimumQuality;
 	}	
 	
-	public int[] getQualityIntVector(){
-		return this.qualityIntVector;
+	public int[] getQualityScoresArray(){
+		return this.qualityScoresArray;
 	}
 	
 	public String toString(){
-		StringBuilder sb =  new StringBuilder(this.SEQ_ID_CHAR + this.id);
+		StringBuilder sb =  new StringBuilder(FastaQ.SEQ_ID_CHAR + this.id);
 		sb.append(" " + this.description + "\n");
 		
 		// Split and append the sequence in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
 		int n = 0;
-		while (this.size() > ((n+1)*this.SEQ_OUTPUT_MAX_LENGTH)) {
-			sb.append((this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH, (n+1) * this.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+		while (this.size() > ((n+1)*Fasta.SEQ_OUTPUT_MAX_LENGTH)) {
+			sb.append((this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
 			n ++;
 		}
-		sb.append(this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH) + "\n");			
+		sb.append(this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH) + "\n");			
 
 		// Split and append the quality in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
-		sb.append(this.QUALITY_ID_CHAR + "\n");
+		sb.append(FastaQ.QUALITY_ID_CHAR + "\n");
 		n = 0;
-		while (this.size() > ((n+1)*this.SEQ_OUTPUT_MAX_LENGTH)) {
-			sb.append((this.quality.substring(n * this.SEQ_OUTPUT_MAX_LENGTH, (n+1) * this.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+		while (this.size() > ((n+1)*Fasta.SEQ_OUTPUT_MAX_LENGTH)) {
+			sb.append((this.quality.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
 			n ++;
 		}		
-		sb.append(this.quality.substring(n * this.SEQ_OUTPUT_MAX_LENGTH));	
+		sb.append(this.quality.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH));	
 
 		return (sb.toString());		
 	}
 	
 	/**
-	 * This method transform the quality char sequence into a int vector, and calculate
-	 * sequence's average quality and maximum and minimum individual quality scores 
+	 * This method obtain the quality scores corresponding to the quality char sequence, 
+	 * depending on the sequence's format, and calculate sequence's average quality and 
+	 * maximum and minimum individual quality scores 
 	 */
-	private void convertQuality(){
+	private void obtainQualityScores(){
 		int total = 0;
 		this.maximumQuality = Integer.MIN_VALUE;
 		this.minimumQuality = Integer.MAX_VALUE;
 		// quality int array initialization
-		qualityIntVector = new int[this.quality.length()];
+		qualityScoresArray = new int[this.quality.length()];
 		
 		// Transform each character in the quality String into a integer, depending on 
 		// the quality scale, and obtain the average, minimum and maximum values
 		for (int i=0; i<this.quality.length(); i++){
 			char c = this.quality.charAt(i);
-			qualityIntVector[i] = c - this.SCALE_FIRST_CHAR[this.format] + this.SCALE_FIRST_INT[this.format];
-			total += this.qualityIntVector[i];
+			qualityScoresArray[i] = c - FastaQ.SCALE_OFFSET[this.format];			
+			total += this.qualityScoresArray[i];
 
-			this.maximumQuality = Math.max(this.qualityIntVector[i], this.maximumQuality);
-			this.minimumQuality = Math.min(this.qualityIntVector[i], this.minimumQuality);
+			this.maximumQuality = Math.max(this.qualityScoresArray[i], this.maximumQuality);
+			this.minimumQuality = Math.min(this.qualityScoresArray[i], this.minimumQuality);
 		}
 		this.averageQuality = (double)total / this.quality.length();
+	}
+	
+	/**
+	 * Change the format of the sequence, and recalculates the quality scores array
+	 * @param format - New quality format
+	 */
+	public void changeFormat(int newFormat){
+		if (this.format != newFormat){
+			int oldFormat = this.format;
+			// Transform the quality scores if the score scales are different 
+			if (this.differentScoreScales(oldFormat, newFormat)){
+				this.transformQualityScoresArray(oldFormat, newFormat);
+			}
+			// Transform the quality string 
+			this.obtainQualityStringFromQualityScoresArray(newFormat);				
+			this.format = newFormat;
+		}
+	}
+	
+	/**
+	 * Transform the quality scores array to the new format scores scale
+	 * @param newFormat - new format
+	 */
+	private void transformQualityScoresArray(int oldFormat, int newFormat) {
+		// Score Map selection
+		Map<Integer, Integer> scoreMap;
+		if (FastaQ.SCALE_SCORE[oldFormat] == FastaQ.PHRED_SCORE_TYPE){
+			scoreMap = FastaQ.phredToSolexaMap;
+		} else {
+			scoreMap = FastaQ.solexaToPhredMap;			
+		}
+		// Transform each quality score in the quality scores array
+		for (int i=0; i<this.qualityScoresArray.length; i++) {
+			if (qualityScoresArray[i] < 10) {
+				qualityScoresArray[i] = scoreMap.get(qualityScoresArray[i]);			
+			}
+		}
+	}
+	
+	/**
+	 * Obtain the quality string related to a score array in the indicated format
+	 * @param format - format
+	 */
+	private void obtainQualityStringFromQualityScoresArray(int format) {
+		char[] qualityChars = new char[this.qualityScoresArray.length];
+		// add the scale offset to each individual score and transform the result to a char
+		for (int i=0; i<this.qualityScoresArray.length; i++){
+			qualityChars[i] = (char)(this.qualityScoresArray[i] + FastaQ.SCALE_OFFSET[format]);
+		}
+		this.quality = new String(qualityChars);
+	}
+	
+	/**
+	 * Check if the score scales associated to two formats are different
+	 * @param format1 - first format
+	 * @param format2 - second format 
+	 * @return boolean - true if the score scales are different
+	 */
+	private boolean differentScoreScales(int format1, int format2){
+		return (FastaQ.SCALE_SCORE[format1] != FastaQ.SCALE_SCORE[format2]);
 	}
 
 	/**
@@ -159,7 +267,7 @@ public class FastaQ extends Fasta {
 			// and divide the result by 'n' to obtain the average value 
 			int totalTailQuality = 0;
 			for (int i=1; i <= numElements; i++){
-				totalTailQuality += this.qualityIntVector[this.size()-i];
+				totalTailQuality += this.qualityScoresArray[this.size()-i];
 			}
 			quality = totalTailQuality / numElements;
 		}
