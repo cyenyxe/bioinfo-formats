@@ -274,4 +274,13 @@ public class FastaQ extends Fasta {
 		return quality;
 	}	
 	
+	/**
+	 * Check if the given format is valid
+	 * @param format - format to check
+	 * @return boolean - true if the format is valid
+	 */
+	public static boolean validFormat(int format){
+		return ( format == FastaQ.SANGER_FORMAT || format == FastaQ.SOLEXA_FORMAT || format == FastaQ.ILLUMINA_FORMAT);
+	}
+	
 }
