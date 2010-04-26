@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.bioinfo.commons.io.TextFileReader;
-import org.bioinfo.formats.core.feature.FastaQ;
+import org.bioinfo.formats.core.feature.FastQ;
 import org.bioinfo.formats.io.exception.FileFormatException;
 
-public class FastaQReader extends AbstractFormatReader<FastaQ> {
+public class FastaQReader extends AbstractFormatReader<FastQ> {
 	
 	private TextFileReader fileReader;
 	
@@ -28,7 +28,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	}
 
 	public FastaQReader(File file) throws IOException {
-		this(file, FastaQ.SANGER_FORMAT);
+		this(file, FastQ.SANGER_FORMAT);
 	}	
 	
 	public FastaQReader(File file, int format) throws IOException {
@@ -43,10 +43,10 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	}
 	
 	@Override
-	public List<FastaQ> readAll() throws FileFormatException {
-		List<FastaQ> fastaList = new LinkedList<FastaQ>();
+	public List<FastQ> readAll() throws FileFormatException {
+		List<FastQ> fastaList = new LinkedList<FastQ>();
 
-		FastaQ fasta;
+		FastQ fasta;
 		while ((fasta = this.read()) != null){
 			fastaList.add(fasta);
 		}
@@ -55,10 +55,10 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	}
 	
 	@Override
-	public List<FastaQ> readAll(String regexFilter) throws FileFormatException {
-		List<FastaQ> fastaList = new LinkedList<FastaQ>();
+	public List<FastQ> readAll(String regexFilter) throws FileFormatException {
+		List<FastQ> fastaList = new LinkedList<FastQ>();
 
-		FastaQ fasta;
+		FastQ fasta;
 		while ((fasta = this.read(regexFilter)) != null){
 			fastaList.add(fasta);
 		}
@@ -66,8 +66,8 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 		return fastaList;
 	}		
 	
-	public FastaQ read() throws FileFormatException{
-		FastaQ fasta = null;	
+	public FastQ read() throws FileFormatException{
+		FastQ fasta = null;	
 
 		try {
 			// Read Id Line. If it's null, the end of file has been reached
@@ -90,7 +90,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 				this.checkQualitySize(id, sequence, quality);
 	
 				// Build Fasta object
-				fasta = new FastaQ(id, desc.trim(), sequence, quality, this.format);
+				fasta = new FastQ(id, desc.trim(), sequence, quality, this.format);
 			}
 		}catch (IOException ex){
 			throw new FileFormatException(ex);
@@ -108,8 +108,8 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	}
 	
 	@Override
-	public FastaQ read(String regexFilter) throws FileFormatException {
-		FastaQ seq = this.read();
+	public FastQ read(String regexFilter) throws FileFormatException {
+		FastQ seq = this.read();
 		boolean found = false;
 		while (!found && seq != null){
 			if (seq.getId().matches(regexFilter)){
@@ -177,7 +177,7 @@ public class FastaQReader extends AbstractFormatReader<FastaQ> {
 	/**
 	 * Check that the sequence and quality strings have the same length
 	 * @param id - FastQ id
-	 * @param sequence - FastaQ sequence string
+	 * @param sequence - FastQ sequence string
 	 * @param quality - FastQ quality string
 	 * @throws FileFormatException - If the sequence and quality strings have different lengths
 	 */

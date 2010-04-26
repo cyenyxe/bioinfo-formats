@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.bioinfo.commons.io.TextFileWriter;
 import org.bioinfo.commons.utils.ArrayUtils;
-import org.bioinfo.formats.core.feature.FastaQ;
+import org.bioinfo.formats.core.feature.FastQ;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -47,7 +47,7 @@ public class FastaQReaderTest {
 			// Obtain the maximum length
 			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/pruebaformatoincorrecto.fq");			
 
-			FastaQ fq;
+			FastQ fq;
 			int maxLength = 0;
 			while((fq = fqr.read()) != null) {
 				maxLength = Math.max(maxLength, fq.size());				
@@ -86,7 +86,7 @@ public class FastaQReaderTest {
 		try {
 			long ini = System.currentTimeMillis();
 			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
-			FastaQ fq;
+			FastQ fq;
 			int n = 0;
 			long totalQuality = 0;
 			double maxAverageQuality = 0;
@@ -129,7 +129,7 @@ public class FastaQReaderTest {
 			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
 			String regExp = "SRR006041.5[0-9]{1}";
 			
-			FastaQ fq;
+			FastQ fq;
 			int n = 0;
 			while((fq = fqr.read(regExp)) != null) {
 				System.out.println(fq.toString());
@@ -148,7 +148,7 @@ public class FastaQReaderTest {
 	public void testReadAll() {
 		try {
 			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/e_coli_10000snp.fq");
-			List<FastaQ> FastaQList = fqr.readAll();
+			List<FastQ> FastaQList = fqr.readAll();
 			System.out.println("FastaQReader.ReadAll: "+FastaQList.size()+" sequences read");
 			fqr.close();
 		} catch (Exception e) {
@@ -163,7 +163,7 @@ public class FastaQReaderTest {
 		try {
 			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/e_coli_10000snp.fq");
 			String regExp = "r199[0-9]";
-			List<FastaQ>FastaQList = fqr.readAll(regExp);
+			List<FastQ>FastaQList = fqr.readAll(regExp);
 			System.out.println("FastaQReader.ReadAllString: " + FastaQList.size() + " sequences whose Id matches regular Expresion '" + regExp + "'");
 			fqr.close();
 			
@@ -193,7 +193,7 @@ public class FastaQReaderTest {
 			FastaQReader fqr = new FastaQReader("/mnt/commons/test/biodata/fasta/SRR006041.filt.fastq");
 			TextFileWriter fw = new TextFileWriter("/mnt/commons/test/biodata/fasta/longitudes_SRR006041.txt");
 			
-			FastaQ fq;
+			FastQ fq;
 			int n = 0;
 			int length;
 			while((fq = fqr.read()) != null) {
@@ -217,11 +217,11 @@ public class FastaQReaderTest {
 		System.out.println ("Transforming SANGER Fasta to different formats");
 		System.out.println ("==============================================");		
 		// Sanger Format Fasta
-		FastaQ fasta = new FastaQ("FormatsFastQTest",
+		FastQ fasta = new FastQ("FormatsFastQTest",
 								  "Format Transformations Test FastQ",
 								  "ATTGCTGAC",
 								  "!&+05:?DI",
-								  FastaQ.SANGER_FORMAT);
+								  FastQ.SANGER_FORMAT);
 		System.out.println("Input Fasta, SANGER:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -229,14 +229,14 @@ public class FastaQReaderTest {
 		String sangerQualityString = fasta.getQuality();
 		
 		// Fasta converted to Illumina Format
-		fasta.changeFormat(FastaQ.ILLUMINA_FORMAT);
+		fasta.changeFormat(FastQ.ILLUMINA_FORMAT);
 		System.out.println("Illumina Converted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
 		// Fasta reconverted to Sanger Format
-		fasta.changeFormat(FastaQ.SANGER_FORMAT);
+		fasta.changeFormat(FastQ.SANGER_FORMAT);
 		System.out.println("Sanger Reconverted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -244,13 +244,13 @@ public class FastaQReaderTest {
 		
 		assert(sangerQualityString.equals(fasta.getQuality()));
 		
-		fasta.changeFormat(FastaQ.SOLEXA_FORMAT);
+		fasta.changeFormat(FastQ.SOLEXA_FORMAT);
 		System.out.println("Solexa Converted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
-		fasta.changeFormat(FastaQ.SANGER_FORMAT);
+		fasta.changeFormat(FastQ.SANGER_FORMAT);
 		System.out.println("Sanger Reconverted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -263,11 +263,11 @@ public class FastaQReaderTest {
 		System.out.println ("Transforming Illumina Fasta to different formats");
 		System.out.println ("================================================");		
 		// Illumina Format Fasta
-		FastaQ fasta = new FastaQ("FormatsFastQTest",
+		FastQ fasta = new FastQ("FormatsFastQTest",
 								  "Format Transformations Test FastQ",
 								  "ATTGCTGAC",
 								  "@EJOTY^ch",
-								  FastaQ.ILLUMINA_FORMAT);
+								  FastQ.ILLUMINA_FORMAT);
 		System.out.println("Input Fasta, ILLUMINA:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -275,14 +275,14 @@ public class FastaQReaderTest {
 		String illuminaQualityString = fasta.getQuality();
 		
 		// Fasta converted to Sanger Format
-		fasta.changeFormat(FastaQ.SANGER_FORMAT);
+		fasta.changeFormat(FastQ.SANGER_FORMAT);
 		System.out.println("Sanger Converted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
 		// Fasta reconverted to Illumina Format
-		fasta.changeFormat(FastaQ.ILLUMINA_FORMAT);
+		fasta.changeFormat(FastQ.ILLUMINA_FORMAT);
 		System.out.println("ILLUMINA Reconverted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -291,14 +291,14 @@ public class FastaQReaderTest {
 		assert(illuminaQualityString.equals(fasta.getQuality()));
 		
 		// Fasta converted to Solexa Format
-		fasta.changeFormat(FastaQ.SOLEXA_FORMAT);
+		fasta.changeFormat(FastQ.SOLEXA_FORMAT);
 		System.out.println("Solexa Converted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
 		// Fasta reconverted to Illumina Format
-		fasta.changeFormat(FastaQ.ILLUMINA_FORMAT);
+		fasta.changeFormat(FastQ.ILLUMINA_FORMAT);
 		System.out.println("ILLUMINA Reconverted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -310,11 +310,11 @@ public class FastaQReaderTest {
 		System.out.println ("Transforming Solexa Fasta to different formats");
 		System.out.println ("================================================");		
 		// Solexa Format Fasta
-		FastaQ fasta = new FastaQ("FormatsFastQTest",
+		FastQ fasta = new FastQ("FormatsFastQTest",
 								  "Format Transformations Test FastQ",
 								  "CATTGCTGAC",
 								  ";@EJOTY^ch",
-								  FastaQ.SOLEXA_FORMAT);
+								  FastQ.SOLEXA_FORMAT);
 		System.out.println("Input Fasta, Solexa:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -322,14 +322,14 @@ public class FastaQReaderTest {
 		String illuminaQualityString = fasta.getQuality();
 		
 		// Fasta converted to Illumina Format
-		fasta.changeFormat(FastaQ.ILLUMINA_FORMAT);
+		fasta.changeFormat(FastQ.ILLUMINA_FORMAT);
 		System.out.println("Illumina Converted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
 		// Fasta reconverted to Solexa Format
-		fasta.changeFormat(FastaQ.SOLEXA_FORMAT);
+		fasta.changeFormat(FastQ.SOLEXA_FORMAT);
 		System.out.println("Solexa Reconverted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -338,14 +338,14 @@ public class FastaQReaderTest {
 		assert(illuminaQualityString.equals(fasta.getQuality()));
 		
 		// Fasta converted to Sanger Format
-		fasta.changeFormat(FastaQ.SANGER_FORMAT);
+		fasta.changeFormat(FastQ.SANGER_FORMAT);
 		System.out.println("Sanger Converted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
 		// Fasta reconverted to Solexa Format
-		fasta.changeFormat(FastaQ.SOLEXA_FORMAT);
+		fasta.changeFormat(FastQ.SOLEXA_FORMAT);
 		System.out.println("Solexa Reconverted Fasta:");
 		System.out.println(fasta);
 		System.out.println("Integer Qualities: ");
@@ -357,18 +357,18 @@ public class FastaQReaderTest {
 		System.out.println ("Transforming Solexa to Phred");
 		System.out.println ("============================");		
 		// Solexa Format Fasta
-		FastaQ fasta = new FastaQ("ScoresFastQTest",
+		FastQ fasta = new FastQ("ScoresFastQTest",
 								  "Scores Transformations Test FastQ",
 								  "CATTGCTGACTTGCA",
 								  ";<=>?@ABCDEFGHI",
-								  FastaQ.SOLEXA_FORMAT);
+								  FastQ.SOLEXA_FORMAT);
 		System.out.println("Input Fasta, Solexa Scores:");
 		System.out.println(fasta);
 		System.out.println("Integer Scores: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
 		// Fasta converted to Illumina Format
-		fasta.changeFormat(FastaQ.ILLUMINA_FORMAT);
+		fasta.changeFormat(FastQ.ILLUMINA_FORMAT);
 		System.out.println("Illumina Converted Fasta, Phred Scores:");
 		System.out.println(fasta);
 		System.out.println("Integer Scores: ");
@@ -380,18 +380,18 @@ public class FastaQReaderTest {
 		System.out.println ("Transforming Phred to Solexa");
 		System.out.println ("============================");		
 		// Illumina Format Fasta
-		FastaQ fasta = new FastaQ("ScoresFastQTest",
+		FastQ fasta = new FastQ("ScoresFastQTest",
 								  "Scores Transformations Test FastQ",
 								  "CATTGCTGAC",
 								  "@ABCDEFGHI",
-								  FastaQ.SOLEXA_FORMAT);
+								  FastQ.SOLEXA_FORMAT);
 		System.out.println("Input Fasta, Illumina Format, Phred Scores:");
 		System.out.println(fasta);
 		System.out.println("Integer Scores: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 		
 		// Fasta converted to Illumina Format
-		fasta.changeFormat(FastaQ.ILLUMINA_FORMAT);
+		fasta.changeFormat(FastQ.ILLUMINA_FORMAT);
 		System.out.println("Solexa Converted Fasta, Solexa Scores:");
 		System.out.println(fasta);
 		System.out.println("Integer Scores: ");
