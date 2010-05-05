@@ -7,6 +7,7 @@ import java.util.List;
 import org.bioinfo.commons.io.TextFileWriter;
 import org.bioinfo.commons.utils.ArrayUtils;
 import org.bioinfo.formats.core.feature.FastQ;
+import org.bioinfo.formats.core.feature.Fasta;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -212,6 +213,7 @@ public class FastaQReaderTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testSangerFastQFormatConversions(){
 		System.out.println ("Transforming SANGER Fasta to different formats");
@@ -258,6 +260,7 @@ public class FastaQReaderTest {
 		
 	}
 	
+	@Ignore
 	@Test
 	public void testIlluminaFastQFormatConversions(){
 		System.out.println ("Transforming Illumina Fasta to different formats");
@@ -305,6 +308,7 @@ public class FastaQReaderTest {
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");		
 	}	
 	
+	@Ignore
 	@Test
 	public void testSolexaFastQFormatConversions(){
 		System.out.println ("Transforming Solexa Fasta to different formats");
@@ -352,6 +356,7 @@ public class FastaQReaderTest {
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");		
 	}		
 
+	@Ignore
 	@Test
 	public void testSolexaToPhredScoresConversions(){
 		System.out.println ("Transforming Solexa to Phred");
@@ -375,6 +380,7 @@ public class FastaQReaderTest {
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 	}
 	
+	@Ignore
 	@Test
 	public void testPhredToSolexaScoresConversions(){
 		System.out.println ("Transforming Phred to Solexa");
@@ -396,6 +402,36 @@ public class FastaQReaderTest {
 		System.out.println(fasta);
 		System.out.println("Integer Scores: ");
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
+	}	
+	
+	@Test
+	public void trimTest() {
+		// Input fasta
+		FastQ fasta = new FastQ("FastqTrimTest", "ltrim and rtrim fastq test", "CTGTACGTCGTAGTCGTAGC", "BBBBFFGGHHTBBB@@@AAB");
+		System.out.println("Input Fastq: ");
+		System.out.println(fasta.toString());
+		System.out.println("Size: " + fasta.size());
+		// lTrim
+		fasta.lTrim(6);
+		System.out.println("L trimmed Fastq: ");
+		System.out.println(fasta);
+		System.out.println("Size: " + fasta.size());
+		assert(fasta.getSeq().equals("GTCGTAGTCGTAGC"));
+		assert(fasta.getQuality().equals("GGHHTBBB@@@AAB"));		
+		// rTrim
+		fasta.rTrim(4);
+		System.out.println("R trimmed Fastq: ");
+		System.out.println(fasta);
+		System.out.println("Size: " + fasta.size());
+		assert(fasta.getSeq().equals("GTCGTAGTCG"));	
+		assert(fasta.getQuality().equals("GGHHTBBB@@"));			
+		// lTrim again
+		fasta.lTrim(5);
+		System.out.println("L trimmed again Fastq: ");
+		System.out.println(fasta);
+		System.out.println("Size: " + fasta.size());
+		assert(fasta.getSeq().equals("AGTCG"));		
+		assert(fasta.getQuality().equals("BBB@@"));		
 	}	
 	
 }

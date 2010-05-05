@@ -159,6 +159,10 @@ public class FastQ extends Fasta {
 
 		return (sb.toString());		
 	}
+
+	public String toFastaString(){
+		return super.toString();
+	}
 	
 	/**
 	 * This method obtain the quality scores corresponding to the quality char sequence, 
@@ -253,6 +257,24 @@ public class FastQ extends Fasta {
 		// Trim sequence and quality strings
 		this.setSeq(this.sequence.substring(0, maxSize));
 		this.setQuality(this.quality.substring(0, maxSize));
+	}
+	
+	/** 
+	 * Trim the sequence removing the first 'n' characters
+	 * @param n - Number of characters to remove
+	 */
+	public void lTrim(int n) {
+		super.lTrim(n);
+		this.setQuality(this.quality.substring(n));
+	}
+	
+	/** 
+	 * Trim the sequence removing the last 'n' characters
+	 * @param n - Number of characters to remove
+	 */	
+	public void rTrim(int n) {
+		super.rTrim(n);
+		this.setQuality(this.quality.substring(0, this.quality.length() - n));		
 	}
 	
 	/**

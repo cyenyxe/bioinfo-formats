@@ -68,6 +68,22 @@ public class Fasta {
 	public int size(){
 		return this.sequence.length();
 	}
+	
+	/** 
+	 * Trim the sequence removing the first 'n' characters
+	 * @param n - Number of characters to remove
+	 */
+	public void lTrim(int n) {
+		this.sequence = this.sequence.substring(n);
+	}
+	
+	/** 
+	 * Trim the sequence removing the last 'n' characters
+	 * @param n - Number of characters to remove
+	 */	
+	public void rTrim(int n) {
+		this.sequence = this.sequence.substring(0, this.sequence.length() - n);
+	}
 
 	@Override
 	public String toString() {
