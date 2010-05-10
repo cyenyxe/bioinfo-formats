@@ -17,10 +17,10 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 	
 	private static final String QUALITY_ID_CHAR = "+";
 	
-	private int format;
+	private int encoding;
 	
-	public FastaQReader(String fileName, int format) throws IOException {
-		this(new File(fileName), format);
+	public FastaQReader(String fileName, int encoding) throws IOException {
+		this(new File(fileName), encoding);
 	}	
 	
 	public FastaQReader(String fileName) throws IOException{
@@ -28,13 +28,13 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 	}
 
 	public FastaQReader(File file) throws IOException {
-		this(file, FastQ.SANGER_FORMAT);
+		this(file, FastQ.SANGER_ENCODING);
 	}	
 	
-	public FastaQReader(File file, int format) throws IOException {
+	public FastaQReader(File file, int encoding) throws IOException {
 		super(file);
 		this.fileReader = new TextFileReader(file.getAbsolutePath());
-		this.format = format;
+		this.encoding = encoding;
 	}		
 
 	@Override
@@ -90,7 +90,7 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 				this.checkQualitySize(id, sequence, quality);
 	
 				// Build Fasta object
-				fasta = new FastQ(id, desc.trim(), sequence, quality, this.format);
+				fasta = new FastQ(id, desc.trim(), sequence, quality, this.encoding);
 			}
 		}catch (IOException ex){
 			throw new FileFormatException(ex);

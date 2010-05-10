@@ -8,7 +8,7 @@ public class FastQ extends Fasta {
 	/** Sequence quality */
 	private String quality;
 	
-	/** Vector contanining PHRED or Solexa (depending on the format) quality scores */
+	/** Vector contanining PHRED or Solexa (depending on the encoding) quality scores */
 	private int[] qualityScoresArray;
 	
 	/** Average quality of the sequence */
@@ -20,17 +20,20 @@ public class FastQ extends Fasta {
 	/** Maximum sequence quality */
 	private int maximumQuality;	
 	
-	/** FastQ Format */
-	private int format;
+	/** FastQ Quality Encoding */
+	private int encoding;
 	
-	/** Constant representing SANGER FORMAT */
-	public static final int SANGER_FORMAT = 0;
+	/** Constant representing SANGER ENCODING */
+	public static final int SANGER_ENCODING = 0;
 	
-	/** Constant representing ILLUMINA FORMAT */
-	public static final int ILLUMINA_FORMAT = 1;
+	/** Constant representing ILLUMINA ENCODING */
+	public static final int ILLUMINA_ENCODING = 1;
 	
-	/** Constant representing SOLEXA FORMAT */
-	public static final int SOLEXA_FORMAT = 2;	
+	/** Constant representing SOLEXA ENCODING */
+	public static final int SOLEXA_ENCODING = 2;	
+	
+	/** String array containing Encoding Names */
+	public static String[] ENCODING_NAMES;
 	
 	/** First char in the different quality scales */
 	private static final char[] SCALE_OFFSET = {33, 64, 64};	
@@ -56,7 +59,13 @@ public class FastQ extends Fasta {
 	/** Phred to Solexa Score Map */ 
 	private static Map<Integer,Integer> phredToSolexaMap;
 	
-	static{
+	static{		
+		// Encoding Names
+		FastQ.ENCODING_NAMES = new String[3];
+		FastQ.ENCODING_NAMES[FastQ.SANGER_ENCODING] = "Sanger";
+		FastQ.ENCODING_NAMES[FastQ.ILLUMINA_ENCODING] = "Illumina";
+		FastQ.ENCODING_NAMES[FastQ.SOLEXA_ENCODING] = "Solexa";		
+		
 		// Solexa To Phred Score Map Initialization
 		solexaToPhredMap = new HashMap<Integer,Integer>();
 		solexaToPhredMap.put(-5, 1);
@@ -90,12 +99,12 @@ public class FastQ extends Fasta {
 	}
 	
 	public FastQ(String id, String description, String sequence, String quality) {
-		this(id, description, sequence, quality, FastQ.SANGER_FORMAT);
+		this(id, description, sequence, quality, FastQ.SANGER_ENCODING);
 	}
 	
-	public FastQ(String id, String description, String sequence, String quality, int format) {
+	public FastQ(String id, String description, String sequence, String quality, int encoding) {
 		super(id, description, sequence);		
-		this.format = format;
+		this.encoding = encoding;
 		this.setQuality(quality);
 	}	
 
@@ -166,7 +175,7 @@ public class FastQ extends Fasta {
 	
 	/**
 	 * This method obtain the quality scores corresponding to the quality char sequence, 
-	 * depending on the sequence's format, and calculate sequence's average quality and 
+	 * depending on the sequence's encoding, and calculate sequence's average quality and 
 	 * maximum and minimum individual quality scores 
 	 */
 	private void obtainQualityScores(){
@@ -180,7 +189,7 @@ public class FastQ extends Fasta {
 		// the quality scale, and obtain the average, minimum and maximum values
 		for (int i=0; i<this.quality.length(); i++){
 			char c = this.quality.charAt(i);
-			qualityScoresArray[i] = c - FastQ.SCALE_OFFSET[this.format];			
+			qualityScoresArray[i] = c - FastQ.SCALE_OFFSET[this.encoding];			
 			total += this.qualityScoresArray[i];
 
 			this.maximumQuality = Math.max(this.qualityScoresArray[i], this.maximumQuality);
@@ -190,63 +199,57 @@ public class FastQ extends Fasta {
 	}
 	
 	/**
-	 * Change the format of the sequence, and recalculates the quality scores array
-	 * @param format - New quality format
+	 * Change the encoding of the sequence, and recalculates the quality scores array
+	 * @param encoding - New quality encoding
 	 */
-	public void changeFormat(int newFormat){
-		if (this.format != newFormat){
-			int oldFormat = this.format;
-			// Transform the quality scores if the score scales are different 
-			if (this.differentScoreScales(oldFormat, newFormat)){
-				this.transformQualityScoresArray(oldFormat, newFormat);
-			}
+	public void changeEncoding(int newEncoding){
+		if (this.encoding != newEncoding){
+			int oldEncoding = this.encoding;
+			// Transform the quality scores, if necessary
+			this.transformQualityScoresArray(oldEncoding, newEncoding);
+
 			// Transform the quality string 
-			this.obtainQualityStringFromQualityScoresArray(newFormat);				
-			this.format = newFormat;
+			this.obtainQualityStringFromQualityScoresArray(newEncoding);				
+			this.encoding = newEncoding;
 		}
 	}
 	
+
 	/**
-	 * Transform the quality scores array to the new format scores scale
-	 * @param newFormat - new format
+	 * Transform the quality scores array if the score types of the encodings are different
+	 * @param oldEncoding - old quality encoding type
+	 * @param newEncoding - new quality encoding type
 	 */
-	private void transformQualityScoresArray(int oldFormat, int newFormat) {
-		// Score Map selection
-		Map<Integer, Integer> scoreMap;
-		if (FastQ.SCALE_SCORE[oldFormat] == FastQ.PHRED_SCORE_TYPE){
-			scoreMap = FastQ.phredToSolexaMap;
-		} else {
-			scoreMap = FastQ.solexaToPhredMap;			
-		}
-		// Transform each quality score in the quality scores array
-		for (int i=0; i<this.qualityScoresArray.length; i++) {
-			if (qualityScoresArray[i] < 10) {
-				qualityScoresArray[i] = scoreMap.get(qualityScoresArray[i]);			
+	private void transformQualityScoresArray(int oldEncoding, int newEncoding) {
+		// If the score types of the encodings are different
+		if (FastQ.SCALE_SCORE[oldEncoding] != FastQ.SCALE_SCORE[newEncoding]) {
+			// Score Map selection
+			Map<Integer, Integer> scoreMap;
+			if (FastQ.SCALE_SCORE[oldEncoding] == FastQ.PHRED_SCORE_TYPE){
+				scoreMap = FastQ.phredToSolexaMap;
+			} else {
+				scoreMap = FastQ.solexaToPhredMap;			
+			}
+			// Transform each quality score in the quality scores array
+			for (int i=0; i<this.qualityScoresArray.length; i++) {
+				if (qualityScoresArray[i] < 10) {
+					qualityScoresArray[i] = scoreMap.get(qualityScoresArray[i]);			
+				}
 			}
 		}
 	}
 	
 	/**
-	 * Obtain the quality string related to a score array in the indicated format
-	 * @param format - format
+	 * Obtain the quality string in the indicated quality encoding, from the quality scores array 
+	 * @param encoding - quality encoding
 	 */
-	private void obtainQualityStringFromQualityScoresArray(int format) {
+	private void obtainQualityStringFromQualityScoresArray(int encoding) {
 		char[] qualityChars = new char[this.qualityScoresArray.length];
 		// add the scale offset to each individual score and transform the result to a char
 		for (int i=0; i<this.qualityScoresArray.length; i++){
-			qualityChars[i] = (char)(this.qualityScoresArray[i] + FastQ.SCALE_OFFSET[format]);
+			qualityChars[i] = (char)(this.qualityScoresArray[i] + FastQ.SCALE_OFFSET[encoding]);
 		}
 		this.quality = new String(qualityChars);
-	}
-	
-	/**
-	 * Check if the score scales associated to two formats are different
-	 * @param format1 - first format
-	 * @param format2 - second format 
-	 * @return boolean - true if the score scales are different
-	 */
-	private boolean differentScoreScales(int format1, int format2){
-		return (FastQ.SCALE_SCORE[format1] != FastQ.SCALE_SCORE[format2]);
 	}
 
 	/**
@@ -297,12 +300,12 @@ public class FastQ extends Fasta {
 	}	
 	
 	/**
-	 * Check if the given format is valid
-	 * @param format - format to check
-	 * @return boolean - true if the format is valid
+	 * Check if the given quality encoding type is valid
+	 * @param encoding - encoding to check
+	 * @return boolean - true if the encoding is valid
 	 */
-	public static boolean validFormat(int format){
-		return ( format == FastQ.SANGER_FORMAT || format == FastQ.SOLEXA_FORMAT || format == FastQ.ILLUMINA_FORMAT);
+	public static boolean validQualityEncoding(int encoding){
+		return ( encoding == FastQ.SANGER_ENCODING || encoding == FastQ.SOLEXA_ENCODING || encoding == FastQ.ILLUMINA_ENCODING);
 	}
 	
 }

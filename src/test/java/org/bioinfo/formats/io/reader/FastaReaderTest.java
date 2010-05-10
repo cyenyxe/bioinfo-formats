@@ -96,7 +96,7 @@ public class FastaReaderTest {
 		}
 	}
 
-	@Ignore
+
 	@Test
 	public void testReadAllString() {
 		try {
