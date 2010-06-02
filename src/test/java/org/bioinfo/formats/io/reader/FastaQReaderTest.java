@@ -1,14 +1,12 @@
 package org.bioinfo.formats.io.reader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import org.bioinfo.commons.io.TextFileWriter;
 import org.bioinfo.commons.utils.ArrayUtils;
 import org.bioinfo.formats.core.feature.FastQ;
-import org.bioinfo.formats.core.feature.Fasta;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class FastaQReaderTest {
@@ -39,7 +37,6 @@ public class FastaQReaderTest {
 		}
 	}
 	
-
 	@Test
 	public void testQualityLengthRelationship() {
 		try {
@@ -79,7 +76,6 @@ public class FastaQReaderTest {
 		
 	}	
 	
-
 	@Test
 	public void testRead() {
 		try {
@@ -121,7 +117,6 @@ public class FastaQReaderTest {
 		}
 	}
 	
-
 	@Test
 	public void testReadString() {
 		try {
@@ -142,7 +137,6 @@ public class FastaQReaderTest {
 		}
 	}
 	
-
 	@Test
 	public void testReadAll() {
 		try {
@@ -155,7 +149,6 @@ public class FastaQReaderTest {
 			fail(e.toString());
 		}
 	}
-
 
 	@Test
 	public void testReadAllString() {
@@ -184,7 +177,6 @@ public class FastaQReaderTest {
 	}
 	
 
-
 	@Test
 	public void escribeCalidadesAFichero(){
 		try {
@@ -211,7 +203,6 @@ public class FastaQReaderTest {
 		}
 	}
 	
-
 	@Test
 	public void testSangerFastQEncodingConversions(){
 		System.out.println ("Transforming SANGER Fasta to different encodings");
@@ -258,7 +249,6 @@ public class FastaQReaderTest {
 		
 	}
 	
-
 	@Test
 	public void testIlluminaFastQFormatConversions(){
 		System.out.println ("Transforming Illumina Fasta to different formats");
@@ -306,7 +296,6 @@ public class FastaQReaderTest {
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");		
 	}	
 	
-
 	@Test
 	public void testSolexaFastQFormatConversions(){
 		System.out.println ("Transforming Solexa Fasta to different encodings");
@@ -354,7 +343,6 @@ public class FastaQReaderTest {
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");		
 	}		
 
-
 	@Test
 	public void testSolexaToPhredScoresConversions(){
 		System.out.println ("Transforming Solexa to Phred");
@@ -378,7 +366,6 @@ public class FastaQReaderTest {
 		System.out.println(ArrayUtils.toString(fasta.getQualityScoresArray())+"\n");
 	}
 	
-
 	@Test
 	public void testPhredToSolexaScoresConversions(){
 		System.out.println ("Transforming Phred to Solexa");

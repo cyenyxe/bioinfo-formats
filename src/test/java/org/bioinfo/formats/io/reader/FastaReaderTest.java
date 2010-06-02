@@ -1,16 +1,15 @@
 package org.bioinfo.formats.io.reader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import org.bioinfo.formats.core.feature.Fasta;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class FastaReaderTest {
 
-	@Ignore
+
 	@Test
 	public void testSize() {
 		try {
@@ -24,7 +23,7 @@ public class FastaReaderTest {
 		}
 	}
 
-	@Ignore
+
 	@Test
 	public void testClose() {
 		try {
@@ -37,7 +36,7 @@ public class FastaReaderTest {
 		}
 	}
 	
-	@Ignore
+
 	@Test
 	public void testRead() {
 		try {
@@ -61,7 +60,7 @@ public class FastaReaderTest {
 		}
 	}
 
-	@Ignore
+
 	@Test
 	public void testReadString() {
 		try {
@@ -82,7 +81,7 @@ public class FastaReaderTest {
 		}
 	}
 	
-	@Ignore
+
 	@Test
 	public void testReadAll() {
 		try {
@@ -122,7 +121,8 @@ public class FastaReaderTest {
 			fail(e.toString());
 		}
 	}
-	
+
+
 	@Test
 	public void trimTest() {
 		// Input fasta
