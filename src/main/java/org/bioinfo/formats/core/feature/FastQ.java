@@ -106,7 +106,14 @@ public class FastQ extends Fasta {
 		super(id, description, sequence);		
 		this.encoding = encoding;
 		this.setQuality(quality);
-	}	
+	}
+	
+	public FastQ(Fasta fasta, int[] qualArray, int encoding){
+		super(fasta.getId(), fasta.description, fasta.getSeq());
+		this.qualityScoresArray = qualArray;
+		this.obtainQualityStringFromQualityScoresArray(encoding);
+		this.obtainQualityMarks();
+	}
 
 	public String getQuality() {
 		return quality;
@@ -114,7 +121,7 @@ public class FastQ extends Fasta {
 
 	public void setQuality(String quality) {
 		this.quality = quality;
-		this.obtainQualityScores();
+		this.obtainQualityScoresFromQualityString();	
 	}
 	
 	public double getAverageQuality() {
@@ -147,7 +154,10 @@ public class FastQ extends Fasta {
 	
 	public String toString(){
 		StringBuilder sb =  new StringBuilder(FastQ.SEQ_ID_CHAR + this.id);
-		sb.append(" " + this.description + "\n");
+		if (!this.description.equals("")){
+			sb.append(" " + this.description);
+		}
+		sb.append("\n");
 		
 		// Split and append the sequence in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
 		int n = 0;
@@ -174,11 +184,24 @@ public class FastQ extends Fasta {
 	}
 	
 	/**
-	 * This method obtain the quality scores corresponding to the quality char sequence, 
+	 * this method obtains the minimum, maximum, and average quality values from the quality scores array
+	 */
+	private void obtainQualityMarks(){
+		int total = 0;
+		for (int i=0; i<this.qualityScoresArray.length; i++) {
+			total += this.qualityScoresArray[i];
+			this.maximumQuality = Math.max(this.qualityScoresArray[i], this.maximumQuality);
+			this.minimumQuality = Math.min(this.qualityScoresArray[i], this.minimumQuality);
+		}
+		this.averageQuality = (double)total / this.quality.length();		
+	}
+	
+	/**
+	 * This method obtain the quality scores array corresponding to the quality char sequence, 
 	 * depending on the sequence's encoding, and calculate sequence's average quality and 
 	 * maximum and minimum individual quality scores 
 	 */
-	private void obtainQualityScores(){
+	private void obtainQualityScoresFromQualityString(){
 		int total = 0;
 		this.maximumQuality = Integer.MIN_VALUE;
 		this.minimumQuality = Integer.MAX_VALUE;
