@@ -2,7 +2,7 @@ package org.bioinfo.formats.io.reader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bioinfo.commons.io.TextFileReader;
@@ -89,7 +89,7 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 
 	@Override
 	public List<Fasta> readAll() throws FileFormatException {
-		List<Fasta> fastaList = new LinkedList<Fasta>();
+		List<Fasta> fastaList = new ArrayList<Fasta>();
 
 		Fasta fasta;
 		while ((fasta = this.read()) != null){
@@ -101,7 +101,7 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 
 	@Override
 	public List<Fasta> readAll(String regexFilter) throws FileFormatException {
-		List<Fasta> fastaList = new LinkedList<Fasta>();
+		List<Fasta> fastaList = new ArrayList<Fasta>();
 
 		Fasta fasta;
 		while ((fasta = this.read(regexFilter)) != null){
@@ -128,7 +128,7 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 	}
 
 	private StringBuilder readSequenceLines() throws FileFormatException, IOException {
-		// read the sequence letters
+		// read the sequence chars
 		StringBuilder sequenceBuilder = new StringBuilder();
 		String line = this.fileReader.readLine();
 		while (line != null && !line.startsWith(FastaReader.SEQ_ID_CHAR)){

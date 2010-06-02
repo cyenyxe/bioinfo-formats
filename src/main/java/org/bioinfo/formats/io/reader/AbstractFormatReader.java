@@ -11,6 +11,9 @@ public abstract class AbstractFormatReader<T> {
 
 	protected File file;
 	
+	protected AbstractFormatReader(){
+	}
+	
 	protected AbstractFormatReader(File f) throws IOException {
 		FileUtils.checkFile(f);
 		this.file = f;

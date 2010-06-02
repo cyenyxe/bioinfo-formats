@@ -2,7 +2,8 @@ package org.bioinfo.formats.io.reader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bioinfo.commons.io.TextFileReader;
@@ -18,6 +19,11 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 	private static final String QUALITY_ID_CHAR = "+";
 	
 	private int encoding;
+	
+	public FastaQReader(InputStream input, int encoding) throws IOException {
+		this.fileReader = new TextFileReader(input);
+		this.encoding = encoding;
+	}
 	
 	public FastaQReader(String fileName, int encoding) throws IOException {
 		this(new File(fileName), encoding);
@@ -44,7 +50,7 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 	
 	@Override
 	public List<FastQ> readAll() throws FileFormatException {
-		List<FastQ> fastaList = new LinkedList<FastQ>();
+		List<FastQ> fastaList = new ArrayList<FastQ>();
 
 		FastQ fasta;
 		while ((fasta = this.read()) != null){
@@ -56,7 +62,7 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 	
 	@Override
 	public List<FastQ> readAll(String regexFilter) throws FileFormatException {
-		List<FastQ> fastaList = new LinkedList<FastQ>();
+		List<FastQ> fastaList = new ArrayList<FastQ>();
 
 		FastQ fasta;
 		while ((fasta = this.read(regexFilter)) != null){
@@ -160,7 +166,6 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 			checkQuality(line);
 			qualityBuilder.append(line);
 			numLinesRead++;
-			//line = this.fileReader.readLine();
 		}		
 		
 		return qualityBuilder;
