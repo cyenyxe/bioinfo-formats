@@ -68,18 +68,34 @@ public class Fasta {
 	public int size(){
 		return this.sequence.length();
 	}
+	
+	/** 
+	 * Trim the sequence removing the first 'n' characters
+	 * @param n - Number of characters to remove
+	 */
+	public void lTrim(int n) {
+		this.sequence = this.sequence.substring(n);
+	}
+	
+	/** 
+	 * Trim the sequence removing the last 'n' characters
+	 * @param n - Number of characters to remove
+	 */	
+	public void rTrim(int n) {
+		this.sequence = this.sequence.substring(0, this.sequence.length() - n);
+	}
 
 	@Override
 	public String toString() {
-		StringBuilder sb =  new StringBuilder(this.SEQ_ID_CHAR + this.id);
+		StringBuilder sb =  new StringBuilder(Fasta.SEQ_ID_CHAR + this.id);
 		sb.append(" " + this.description + "\n");
 		// Split and append the sequence in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
 		int n = 0;
-		while (this.size() > ((n+1)*this.SEQ_OUTPUT_MAX_LENGTH)) {
-			sb.append((this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH, (n+1) * this.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+		while (this.size() > ((n+1)*Fasta.SEQ_OUTPUT_MAX_LENGTH)) {
+			sb.append((this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
 			n ++;
 		}
-		sb.append(this.sequence.substring(n * this.SEQ_OUTPUT_MAX_LENGTH));	
+		sb.append(this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH));	
 		
 		return (sb.toString());
 	}
