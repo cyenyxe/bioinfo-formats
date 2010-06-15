@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.bioinfo.commons.io.TextFileReader;
 import org.bioinfo.commons.utils.ArrayUtils;
-import org.bioinfo.formats.core.feature.Qual;
+import org.bioinfo.formats.core.sequence.Qual;
 import org.bioinfo.formats.io.exception.FileFormatException;
 
 public class QualReader extends AbstractFormatReader<Qual> {

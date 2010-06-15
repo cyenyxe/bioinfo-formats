@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.List;
 
-import org.bioinfo.formats.core.feature.Qual;
+import org.bioinfo.formats.core.sequence.Qual;
 import org.bioinfo.formats.io.exception.FileFormatException;
 import org.junit.Test;
 
