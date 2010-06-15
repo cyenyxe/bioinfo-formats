@@ -1,4 +1,4 @@
-package org.bioinfo.formats.core.feature;
+package org.bioinfo.formats.core.sequence;
 
 
 /**

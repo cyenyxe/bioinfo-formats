@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bioinfo.commons.io.TextFileReader;
-import org.bioinfo.formats.core.feature.Fasta;
+import org.bioinfo.formats.core.sequence.Fasta;
 import org.bioinfo.formats.io.exception.FileFormatException;
 
 public class FastaReader extends AbstractFormatReader<Fasta> {

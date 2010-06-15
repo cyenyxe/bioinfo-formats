@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.bioinfo.commons.io.TextFileWriter;
 import org.bioinfo.commons.utils.ArrayUtils;
-import org.bioinfo.formats.core.feature.FastQ;
+import org.bioinfo.formats.core.sequence.FastQ;
 import org.junit.Test;
 
 public class FastaQReaderTest {

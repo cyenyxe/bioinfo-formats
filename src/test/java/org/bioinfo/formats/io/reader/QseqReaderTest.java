@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.bioinfo.formats.core.feature.Qseq;
+import org.bioinfo.formats.core.sequence.Qseq;
 import org.junit.Test;
 
 public class QseqReaderTest {

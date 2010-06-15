@@ -4,7 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.bioinfo.formats.core.feature.Fasta;
+import org.bioinfo.formats.core.sequence.Fasta;
 import org.junit.Test;
 
 public class FastaReaderTest {
