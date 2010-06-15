@@ -133,7 +133,7 @@ public class QualReader extends AbstractFormatReader<Qual> {
 		}
 		
 		// convert the stringBuilder into a int array
-		qualities = ArrayUtils.toIntArray(qualStringBuilder.toString().split("\\s"), 0);
+		qualities = ArrayUtils.toIntArray(qualStringBuilder.toString().replaceAll("255", "0").split("\\s"), 0);
 		
 		// Check if we have reached a new sequence or the end of file 
 		if (line !=null){

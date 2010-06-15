@@ -153,25 +153,26 @@ public class FastQ extends Fasta {
 	}
 	
 	public String toString(){
-		StringBuilder sb =  new StringBuilder(FastQ.SEQ_ID_CHAR + this.id);
+		StringBuilder sb =  new StringBuilder();
+		sb.append(FastQ.SEQ_ID_CHAR).append(this.id);
 		if (!this.description.equals("")){
-			sb.append(" " + this.description);
+			sb.append(" ").append(this.description);
 		}
 		sb.append("\n");
 		
 		// Split and append the sequence in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
 		int n = 0;
 		while (this.size() > ((n+1)*Fasta.SEQ_OUTPUT_MAX_LENGTH)) {
-			sb.append((this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+			sb.append(this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)).append("\n");
 			n ++;
 		}
-		sb.append(this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH) + "\n");			
+		sb.append(this.sequence.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH)).append("\n");			
 
 		// Split and append the quality in lines with a maximum size of SEQ_OUTPUT_MAX_LENGTH
-		sb.append(FastQ.QUALITY_ID_CHAR + "\n");
+		sb.append(FastQ.QUALITY_ID_CHAR).append("\n");
 		n = 0;
 		while (this.size() > ((n+1)*Fasta.SEQ_OUTPUT_MAX_LENGTH)) {
-			sb.append((this.quality.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)) + "\n");
+			sb.append(this.quality.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH, (n+1) * Fasta.SEQ_OUTPUT_MAX_LENGTH)).append("\n");
 			n ++;
 		}		
 		sb.append(this.quality.substring(n * Fasta.SEQ_OUTPUT_MAX_LENGTH));	
