@@ -1,10 +1,11 @@
 package org.bioinfo.formats.io.reader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import org.bioinfo.formats.core.sequence.Qseq;
+import org.bioinfo.formats.core.sequence.io.QseqReader;
 import org.junit.Test;
 
 public class QseqReaderTest {

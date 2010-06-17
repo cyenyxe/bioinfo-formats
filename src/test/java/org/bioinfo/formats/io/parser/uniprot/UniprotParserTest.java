@@ -4,8 +4,9 @@ import static org.junit.Assert.fail;
 
 import javax.xml.bind.JAXBException;
 
-import org.bioinfo.formats.io.parser.uniprot.v135jaxb.Entry;
-import org.bioinfo.formats.io.parser.uniprot.v135jaxb.Uniprot;
+import org.bioinfo.formats.parser.uniprot.UniprotParser;
+import org.bioinfo.formats.parser.uniprot.v135jaxb.Entry;
+import org.bioinfo.formats.parser.uniprot.v135jaxb.Uniprot;
 import org.junit.Test;
 
 public class UniprotParserTest {

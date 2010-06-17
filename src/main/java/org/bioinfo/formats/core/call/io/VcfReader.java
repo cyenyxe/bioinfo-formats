@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.bioinfo.commons.io.utils.FileUtils;
 import org.bioinfo.formats.core.call.Vcf;
-import org.bioinfo.formats.io.exception.FileFormatException;
+import org.bioinfo.formats.exception.FileFormatException;
 
 public class VcfReader {
 

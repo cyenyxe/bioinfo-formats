@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.bioinfo.formats.core.sequence.Fasta;
+import org.bioinfo.formats.core.sequence.io.FastaReader;
 import org.junit.Test;
 
 public class FastaReaderTest {
