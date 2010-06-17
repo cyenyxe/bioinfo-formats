@@ -1,4 +1,4 @@
-package org.bioinfo.formats.io.reader;
+package org.bioinfo.formats.core.feature.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import org.bioinfo.commons.io.BeanReader;
 import org.bioinfo.commons.io.utils.IOUtils;
 import org.bioinfo.formats.core.feature.Bed;
 import org.bioinfo.formats.io.exception.FileFormatException;
+import org.bioinfo.formats.io.reader.AbstractFormatReader;
 
 public class BedReader extends AbstractFormatReader<Bed> {
 
@@ -23,13 +24,12 @@ public class BedReader extends AbstractFormatReader<Bed> {
 	}
 
 	@Override
-	public void close() throws IOException {
-		beanReader.close();
-	}
-
-	@Override
-	public List<Bed> readAll() {
-		return null;
+	public List<Bed> readAll() throws FileFormatException {
+		try {
+			return beanReader.getAll();
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		}
 	}
 
 	@Override
@@ -56,5 +56,9 @@ public class BedReader extends AbstractFormatReader<Bed> {
 		return null;
 	}
 
+	@Override
+	public void close() throws IOException {
+		beanReader.close();
+	}
 
 }

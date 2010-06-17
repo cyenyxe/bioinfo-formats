@@ -1,5 +1,6 @@
 package org.bioinfo.formats.core.feature;
 
+@Deprecated
 public abstract class AbstractFeature {
 	
 	private String chromosome;
