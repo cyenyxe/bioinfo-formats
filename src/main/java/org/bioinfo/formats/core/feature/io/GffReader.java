@@ -26,30 +26,46 @@ public class GffReader extends AbstractFormatReader<Gff> {
 	@Override
 	public Gff read() throws FileFormatException {
 		try {
-			return beanReader.next();
+			return beanReader.read();
 		} catch (Exception e) {
 			throw new FileFormatException(e);
 		} 
 	}
 
 	@Override
-	public Gff read(String regexFilter) throws FileFormatException {
-		return null;
+	public Gff read(String pattern) throws FileFormatException {
+		try {
+			return beanReader.read(pattern);
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		} 
 	}
 
 	@Override
+	public List<Gff> read(int numberLines) throws FileFormatException {
+		try {
+			return beanReader.read(numberLines);
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		} 
+	}
+	
+	@Override
 	public List<Gff> readAll() throws FileFormatException {
 		try {
-			return beanReader.getAll();
+			return beanReader.readAll();
 		} catch (Exception e) {
 			throw new FileFormatException(e);
 		}
 	}
-
+	
 	@Override
-	public List<Gff> readAll(String regexFilter) throws FileFormatException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Gff> readAll(String pattern) throws FileFormatException {
+		try {
+			return beanReader.readAll(pattern);
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		}
 	}
 
 	@Override
@@ -61,5 +77,5 @@ public class GffReader extends AbstractFormatReader<Gff> {
 	public void close() throws IOException {
 		beanReader.close();
 	}
-	
+
 }

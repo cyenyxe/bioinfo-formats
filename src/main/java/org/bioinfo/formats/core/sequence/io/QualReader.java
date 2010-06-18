@@ -144,6 +144,12 @@ public class QualReader extends AbstractFormatReader<Qual> {
 		}
 
 		return qualities;
+	}
+
+	@Override
+	public List<Qual> read(int size) throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 
 }
