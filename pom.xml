@@ -6,6 +6,11 @@
 	<version>0.2.0</version>
 	<dependencies>
 		<dependency>
+			<groupId>paxtools</groupId>
+			<artifactId>paxtools</artifactId>
+			<version>1.0b1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.bioinfo</groupId>
 			<artifactId>bioinfo-commons</artifactId>
 			<version>0.9.0</version>
@@ -15,6 +20,16 @@
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>sax</groupId>
+			<artifactId>sax</artifactId>
+			<version>2.0.1</version>
 		</dependency>
 	</dependencies>
 	<build>
