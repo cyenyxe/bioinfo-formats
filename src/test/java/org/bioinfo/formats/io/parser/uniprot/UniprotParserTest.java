@@ -18,8 +18,8 @@ public class UniprotParserTest {
 
 	public void testLoadXMLInfo() {
 
-		String chunksDirname = "/home/jtarraga/bioinfo/uniprot/chunks/";
-		String outFilename = "/home/jtarraga/bioinfo/uniprot/snp_in_uniprot.txt";
+		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
+		String outFilename = "/mnt/commons/formats/uniprot/snp_in_uniprot.txt";
 
 		UniprotParser up = new UniprotParser();
 
@@ -93,8 +93,8 @@ public class UniprotParserTest {
 	public void testLoadOmimInfo() {
 		int count = 1;
 
-		String inFilename = "/home/jtarraga/bioinfo/omim/omim.txt";
-		String outFilename = "/home/jtarraga/bioinfo/omim/snp_in_omim.txt";
+		String inFilename = "/mnt/commons/formats/omim/omim.txt";
+		String outFilename = "/mnt/commons/formats/omim/snp_in_omim.txt";
 
 		try {
 			boolean endOfRecord = true;
