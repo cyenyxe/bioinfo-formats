@@ -10,9 +10,9 @@ public class BioPaxParserTest {
 
 	@Test
 	public void Test() {
-		//String filename = "/home/jtarraga/bioinfo/reactome/Bos taurus.owl";
-		String filename = "/home/jtarraga/bioinfo/reactome/Homo sapiens.owl";
-		//String filename = "/home/jtarraga/bioinfo/reactome/Felis catus.owl";
+		//String filename = "/mnt/commons/formats/reactome/Bos taurus.owl";
+		String filename = "/mnt/commons/formats/reactome/Homo sapiens.owl";
+		//String filename = "/mnt/commons/formats/reactome/Felis catus.owl";
 
 		try {
 			BioPaxParser parser = new BioPaxParser(filename);
