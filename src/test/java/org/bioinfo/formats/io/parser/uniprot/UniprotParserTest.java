@@ -1,8 +1,6 @@
 package org.bioinfo.formats.io.parser.uniprot;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +9,10 @@ import org.bioinfo.commons.io.TextFileWriter;
 import org.bioinfo.commons.io.utils.FileUtils;
 import org.bioinfo.commons.utils.ListUtils;
 import org.bioinfo.commons.utils.StringUtils;
-import org.bioinfo.formats.io.parser.uniprot.v135jaxb.Entry;
-import org.bioinfo.formats.io.parser.uniprot.v135jaxb.FeatureType;
-import org.bioinfo.formats.io.parser.uniprot.v135jaxb.Uniprot;
-import org.junit.Test;
+import org.bioinfo.formats.parser.uniprot.UniprotParser;
+import org.bioinfo.formats.parser.uniprot.v135jaxb.Entry;
+import org.bioinfo.formats.parser.uniprot.v135jaxb.FeatureType;
+import org.bioinfo.formats.parser.uniprot.v135jaxb.Uniprot;
 
 public class UniprotParserTest {
 
@@ -38,8 +36,8 @@ public class UniprotParserTest {
 
 			File[] xmlFiles = FileUtils.listFiles(new File(chunksDirname), ".+.xml", true);
 
-//			List<File> xmlFiles = new ArrayList<File>();
-//			xmlFiles.add(new File("/home/jtarraga/bioinfo/uniprot/chunks/chunk_entry_007.xml"));
+			//			List<File> xmlFiles = new ArrayList<File>();
+			//			xmlFiles.add(new File("/home/jtarraga/bioinfo/uniprot/chunks/chunk_entry_007.xml"));
 			for(File file: xmlFiles) {
 
 				System.out.println("searching in " + file.getAbsolutePath() + "...");
@@ -59,11 +57,11 @@ public class UniprotParserTest {
 								for(String value: values) {
 									if (value.contains("dbSNP")) {
 										ids = value.split("dbSNP:");
-//										System.out.println("value = " + value);
+										//										System.out.println("value = " + value);
 										for(String id: ids) {
 											if (id.startsWith("rs")) {
 												id = id.split(" ")[0].replace(")", "");
-//												System.out.println("id: " + id);
+												//												System.out.println("id: " + id);
 												snpIds.add(id);
 											}
 										}
@@ -91,46 +89,45 @@ public class UniprotParserTest {
 		}
 
 	}
-	
-	@Test
+
 	public void testLoadOmimInfo() {
 		int count = 1;
-		
+
 		String inFilename = "/home/jtarraga/bioinfo/omim/omim.txt";
 		String outFilename = "/home/jtarraga/bioinfo/omim/snp_in_omim.txt";
-		
+
 		try {
 			boolean endOfRecord = true;
 			String line;
-			
+
 			TextFileWriter writer = new TextFileWriter(outFilename);
 			writer.writeLine("#snp\tsource\tsource ID\tsource name\tdescription");
-			
+
 			TextFileReader reader = new TextFileReader(inFilename);
-			
+
 			String id = null, description = null;
 			List<String> snpIds = new ArrayList<String>();
 			List<String> snpLines = new ArrayList<String>();
 			StringBuilder sb = new StringBuilder();
-			
+
 			while ((line=reader.readLine())!=null) {
-				
+
 				//System.out.println("line = " + line);
-				
+
 				if (line.startsWith("*RECORD*")) {
-										
+
 					id = null;
 					description = null;
 					snpLines.clear();
 					snpIds.clear();
 					endOfRecord = false;
 					sb.setLength(0);
-					
+
 					while(!endOfRecord && line!=null) {
 						line = reader.readLine();
-						
+
 						//System.out.println("line = " + line);
-						
+
 						if (line.startsWith("*FIELD* NO")) {
 							id = reader.readLine();
 							System.out.println("parsing record " + id + " (count " + (count++) + ")....");
@@ -150,23 +147,23 @@ public class UniprotParserTest {
 						for(String snpId: snpIds) {
 							writer.writeLine(snpId + "\tomim\t" + id + "\t\t" + description);							
 						}
-//						if (snpLines.size()>0) {
-//						System.out.println(id + "\t" + description);
-//						System.out.println(ListUtils.toString(snpLines, "\n"));
-//						Runtime.getRuntime().exit(0);
+						//						if (snpLines.size()>0) {
+						//						System.out.println(id + "\t" + description);
+						//						System.out.println(ListUtils.toString(snpLines, "\n"));
+						//						Runtime.getRuntime().exit(0);
 					}
 				}
 			}
-			
+
 			writer.close();
 
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
+
+
 
 	}
 
@@ -175,13 +172,13 @@ public class UniprotParserTest {
 		String snpId;
 
 		//System.out.println("line = " + line);
-	
+
 		boolean endOfId;
 		int endLine, beginIndex;
-		
+
 		beginIndex = 0;
 		endLine = line.length();
-		
+
 		while (beginIndex < endLine) {
 			beginIndex = line.indexOf("dbSNP rs", beginIndex);
 			if (beginIndex<0) {
@@ -199,17 +196,17 @@ public class UniprotParserTest {
 			//System.out.println("endIndex = " + endIndex);
 			//snpId = line.substring(beginIndex + 6, endIndex); //, line.indexOf(" ", beginIndex + 7));
 			//beginIndex = endIndex + 1;
-			
+
 			res.add(snpId);
 			//System.out.println("snpId = (" + snpId + ")" + beginIndex + ", " + endLine);
 			//Runtime.getRuntime().exit(0);
 		}
-		
-//		if (ListUtils.unique(res).size()>1) {
-//			System.out.println("snpIds = (" + ListUtils.toString(res, ",") + ")");
-//			Runtime.getRuntime().exit(0);
-//		}
-		
+
+		//		if (ListUtils.unique(res).size()>1) {
+		//			System.out.println("snpIds = (" + ListUtils.toString(res, ",") + ")");
+		//			Runtime.getRuntime().exit(0);
+		//		}
+
 		return ListUtils.unique(res);
 	}
 
@@ -219,5 +216,4 @@ public class UniprotParserTest {
 		}
 		return false;
 	}
-
 }

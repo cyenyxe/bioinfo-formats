@@ -1,12 +1,13 @@
 package org.bioinfo.formats.io.reader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.List;
 
-import org.bioinfo.formats.core.feature.Qual;
-import org.bioinfo.formats.io.exception.FileFormatException;
+import org.bioinfo.formats.core.sequence.Qual;
+import org.bioinfo.formats.core.sequence.io.QualReader;
+import org.bioinfo.formats.exception.FileFormatException;
 import org.junit.Test;
 
 public class QualReaderTest {
