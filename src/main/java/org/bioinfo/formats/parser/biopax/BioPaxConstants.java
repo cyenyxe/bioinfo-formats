@@ -43,7 +43,7 @@ public class BioPaxConstants {
 	public static final List<String> BIOPAX_GENE_LIST = StringUtils.toList("Gene");
 	public static final List<String> BIOPAX_INTERACTION_LIST = StringUtils.toList("Interaction,Control,Catalysis,Modulation,TemplateReactionRegulation,Conversion,BiochemicalReaction,ComplexAssembly,Degradation,Transport,TransportWithBiochemicalreaction,GeneticInteraction,MolecularInteraction,TemplateReaction");
 	public static final List<String> BIOPAX_PATHWAY_LIST = StringUtils.toList("Pathway");
-	public static final List<String> BIOPAX_PHYSICAL_ENTITY_LIST = StringUtils.toList("PhysicalEntity,Complex,DNA,Protein,RNA,SmallMolecule");
+	public static final List<String> BIOPAX_PHYSICAL_ENTITY_LIST = StringUtils.toList("PhysicalEntity,Complex,DNA,Protein,Rna,SmallMolecule");
 
 	public static final List<String> BIOPAX_UTILITY_LIST = StringUtils.toList("UtilityClass,BioSource,ChemicalStructure,ControlledVocabulary,CellularLocationVocabulary,CellVocabulary,EntityReferenceGroupVocabulary,EvidenceCodeVocabulary,ExperimentalFormVocabulary,InteractionVocabulary,PhenotypeVocabulary,SequenceLocationVocabulary,SequenceModificationVocabulary,TissueVocabulary,DeltaGPrime0,EntityFeature,BindingFeature,ModificationFeature,EntityReference,DnaReference,ProteinReference,RnaReference,SmallMoleculeReference,Evidence,ExperimentalForm,KPrime,PathwayStep,Provenance,Score,SequenceLocation,SequenceInterval,SequenceSite,Stoichiometry,Xref,PublicationXref,RelationshipXref,UnificationXref");
 
