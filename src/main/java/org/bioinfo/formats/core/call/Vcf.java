@@ -10,6 +10,7 @@ public class Vcf {
 	private String quality;
 	private String filter;
 	private String info;
+	private String format;
 	
 	/**
 	 * @param chromosome
@@ -31,8 +32,50 @@ public class Vcf {
 		this.filter = filter;
 		this.info = info;
 	}
-
 	
+	/**
+	 * @param chromosome
+	 * @param position
+	 * @param id
+	 * @param reference
+	 * @param alternate
+	 * @param quality
+	 * @param filter
+	 * @param info
+	 */
+	public Vcf(String chromosome, Integer position, String id, String reference, String alternate, String quality, String filter, String info, String format) {
+		this.chromosome = chromosome;
+		this.position = position;
+		this.id = id;
+		this.reference = reference;
+		this.alternate = alternate;
+		this.quality = quality;
+		this.filter = filter;
+		this.info = info;
+		this.format =  format;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(chromosome).append("\t");
+		builder.append(position).append("\t");
+		builder.append(id).append("\t");
+		builder.append(reference).append("\t");
+		builder.append(alternate).append("\t");
+		builder.append(quality).append("\t");
+		builder.append(filter).append("\t");
+		builder.append(info);
+		if(format != null) {
+			builder.append("\t").append(format);
+		}
+		return builder.toString();
+	}
+
+
 	/**
 	 * @return the chromosome
 	 */
@@ -135,6 +178,20 @@ public class Vcf {
 	 */
 	public void setInfo(String info) {
 		this.info = info;
+	}
+
+	/**
+	 * @param format the format to set
+	 */
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	/**
+	 * @return the format
+	 */
+	public String getFormat() {
+		return format;
 	}
 
 }

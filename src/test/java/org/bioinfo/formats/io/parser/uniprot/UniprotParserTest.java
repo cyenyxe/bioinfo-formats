@@ -13,9 +13,11 @@ import org.bioinfo.formats.parser.uniprot.UniprotParser;
 import org.bioinfo.formats.parser.uniprot.v135jaxb.Entry;
 import org.bioinfo.formats.parser.uniprot.v135jaxb.FeatureType;
 import org.bioinfo.formats.parser.uniprot.v135jaxb.Uniprot;
+import org.junit.Test;
 
 public class UniprotParserTest {
 
+	@Test
 	public void testLoadXMLInfo() {
 
 		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
@@ -35,7 +37,9 @@ public class UniprotParserTest {
 			Uniprot uniprot = null;
 
 			File[] xmlFiles = FileUtils.listFiles(new File(chunksDirname), ".+.xml", true);
-
+			
+			// for testing purposes
+			xmlFiles = new File[] {xmlFiles[0], xmlFiles[1]};
 			//			List<File> xmlFiles = new ArrayList<File>();
 			//			xmlFiles.add(new File("/home/jtarraga/bioinfo/uniprot/chunks/chunk_entry_007.xml"));
 			for(File file: xmlFiles) {

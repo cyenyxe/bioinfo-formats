@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bioinfo.commons.io.utils.FileUtils;
+import org.bioinfo.commons.io.utils.IOUtils;
+import org.bioinfo.formats.commons.AbstractFormatReader;
 import org.bioinfo.formats.core.call.Vcf;
 import org.bioinfo.formats.exception.FileFormatException;
 
-public class VcfReader {
+public class VcfReader extends AbstractFormatReader<Vcf> {
 
-	private File file;
+//	private File file;
 	private BufferedReader bufferedReader;
 	
 	private String fileFormat;
@@ -40,7 +42,8 @@ public class VcfReader {
 	
 	private void processMetaData() throws IOException, FileFormatException {
 		String line = "";
-		while((line = bufferedReader.readLine()).startsWith("#")) {
+		BufferedReader localBufferedReader = new BufferedReader(new FileReader(file));
+		while((line = localBufferedReader.readLine()).startsWith("#")) {
 			if(line.startsWith("##fileformat")) {
 				if(line.split("=").length > 1) {
 					this.fileFormat = line.split("=")[1].trim();
@@ -60,7 +63,7 @@ public class VcfReader {
 							if(line.startsWith("#CHROM")) {
 								
 							}else {
-								
+								;
 							}
 						}
 					}
@@ -70,13 +73,67 @@ public class VcfReader {
 			}
 			
 		}
+		localBufferedReader.close();
 	}
 	
-	public Vcf read() throws IOException {
-		String line = bufferedReader.readLine();
-		String [] fields = line.split("\t");
-		return new Vcf(fields[0], Integer.parseInt(fields[1]), fields[2], fields[3], fields[4], fields[5], fields[6], fields[7]);
+	@Override
+	public Vcf read() throws FileFormatException {
+		String line;
+		try {
+//			line = bufferedReader.readLine();
+			while((line = bufferedReader.readLine()) != null && (line.trim().equals("") || line.startsWith("#"))) {
+				;
+			}
+			if(line != null) {
+				String [] fields = line.split("\t");
+				StringBuilder format = new StringBuilder();
+				for(int i=8; i<fields.length; i++) {
+					format.append(fields[i]).append("\t");
+				}
+				return new Vcf(fields[0], Integer.parseInt(fields[1]), fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], format.toString().trim());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
+
+	@Override
+	public Vcf read(String regexFilter) throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Vcf> read(int size) throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Vcf> readAll() throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Vcf> readAll(String pattern) throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int size() throws IOException, FileFormatException {
+		int total = IOUtils.countLines(file);
+		int comment = IOUtils.grep(file, "#·+").size();
+		return total-comment;
+	}
+	
+	@Override
+	public void close() throws IOException {
+		bufferedReader.close();
+	}
+
 	
 	/**
 	 * @param file the file to set
@@ -304,4 +361,5 @@ public class VcfReader {
 			this.description = description;
 		}
 	}
+
 }
