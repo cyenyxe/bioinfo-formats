@@ -10,13 +10,88 @@ import org.bioinfo.commons.io.utils.FileUtils;
 import org.bioinfo.commons.utils.ListUtils;
 import org.bioinfo.commons.utils.StringUtils;
 import org.bioinfo.formats.parser.uniprot.UniprotParser;
+import org.bioinfo.formats.parser.uniprot.v135jaxb.CommentType;
 import org.bioinfo.formats.parser.uniprot.v135jaxb.Entry;
 import org.bioinfo.formats.parser.uniprot.v135jaxb.FeatureType;
 import org.bioinfo.formats.parser.uniprot.v135jaxb.Uniprot;
+import org.junit.Test;
 
 public class UniprotParserTest {
 
-	public void testLoadXMLInfo() {
+	@Test
+	public void getNamesAndFunctionFromUniprot() {
+
+		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
+		String outFilename = "/mnt/commons/formats/uniprot/names_and_function_uniprot.txt";
+
+		UniprotParser up = new UniprotParser();
+
+		try {
+			String name, proteinName, geneName, function;
+
+			TextFileWriter writer = new TextFileWriter(outFilename);
+			writer.writeLine("#accession\tname\tprotein name\tgene name\tfunction");
+			Uniprot uniprot = null;
+
+			File[] xmlFiles = FileUtils.listFiles(new File(chunksDirname), ".+.xml", true);
+
+			//			List<File> xmlFiles = new ArrayList<File>();
+			//			xmlFiles.add(new File("/home/jtarraga/bioinfo/uniprot/chunks/chunk_entry_007.xml"));
+			for(File file: xmlFiles) {
+
+				System.out.println("searching in " + file.getAbsolutePath() + "...");
+
+				uniprot = (Uniprot) up.loadXMLInfo(file.getAbsolutePath());
+				for(Entry entry: uniprot.getEntry()) {
+					//System.out.println("accession = " + entry.getAccession().get(0));
+					name = "";
+					proteinName = "";
+					geneName = "";
+					function = "";
+
+					if (entry.getName()!=null && entry.getName().get(0)!=null && entry.getName().get(0).length()>0) {
+						name = entry.getName().get(0);
+					}
+
+					if (entry.getProtein()!=null) {
+						if (entry.getProtein().getRecommendedName()!=null) {
+							proteinName = entry.getProtein().getRecommendedName().getFullName().getValue();
+						}
+					}
+
+					if (entry.getGene()!=null && entry.getGene().size()>0 && entry.getGene().get(0)!=null) {
+						geneName = entry.getGene().get(0).getName().get(0).getValue();
+					}
+
+					for(CommentType commentType: entry.getComment()) {
+						if (commentType.getType().equalsIgnoreCase("function")) {
+							function = commentType.getText().getValue();
+							break;
+						}
+					}
+
+					for(String accession: entry.getAccession()) {
+						writer.writeLine(accession + "\t" + name + "\t" + proteinName + "\t" + geneName + "\t" + function);
+					}
+
+//					if ("P31946".equalsIgnoreCase(entry.getAccession().get(0))) {
+//						System.out.println("fuction = " + function);
+//						
+//						writer.close();
+//						Runtime.getRuntime().exit(1);
+//					}
+
+				}				
+			}
+
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void getSnpFromUniprot() {
 
 		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
 		String outFilename = "/mnt/commons/formats/uniprot/snp_in_uniprot.txt";
