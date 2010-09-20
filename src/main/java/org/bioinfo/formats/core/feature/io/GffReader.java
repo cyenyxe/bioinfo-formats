@@ -26,7 +26,7 @@ public class GffReader extends AbstractFormatReader<Gff> {
 	@Override
 	public Gff read() throws FileFormatException {
 		try {
-			return beanReader.next();
+			return beanReader.read();
 		} catch (Exception e) {
 			throw new FileFormatException(e);
 		} 
@@ -40,7 +40,7 @@ public class GffReader extends AbstractFormatReader<Gff> {
 	@Override
 	public List<Gff> readAll() throws FileFormatException {
 		try {
-			return beanReader.getAll();
+			return beanReader.readAll();
 		} catch (Exception e) {
 			throw new FileFormatException(e);
 		}

@@ -26,7 +26,7 @@ public class BedReader extends AbstractFormatReader<Bed> {
 	@Override
 	public List<Bed> readAll() throws FileFormatException {
 		try {
-			return beanReader.getAll();
+			return beanReader.readAll();
 		} catch (Exception e) {
 			throw new FileFormatException(e);
 		}
@@ -40,7 +40,7 @@ public class BedReader extends AbstractFormatReader<Bed> {
 	@Override
 	public Bed read() throws FileFormatException {
 		try {
-			return beanReader.next();
+			return beanReader.read();
 		} catch (Exception e) {
 			throw new FileFormatException(e);
 		}
