@@ -1,5 +1,7 @@
 package org.bioinfo.formats.io.parser.uniprot;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,8 @@ public class UniprotParserTest {
 	public void testLoadXMLInfo() {
 
 		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
-		String outFilename = "/mnt/commons/formats/uniprot/snp_in_uniprot.txt";
+		String outSnpFilename = "/mnt/commons/formats/uniprot/snp_in_uniprot2.txt";
+		String outMutationFilename = "/mnt/commons/formats/uniprot/mutation_in_uniprot2.txt";
 
 		UniprotParser up = new UniprotParser();
 
@@ -32,16 +35,20 @@ public class UniprotParserTest {
 			List<String> descs = new ArrayList<String>();
 			List<String> snpIds = new ArrayList<String>();
 
-			TextFileWriter writer = new TextFileWriter(outFilename);
-			writer.writeLine("#snp\tsource\tsource ID\tsource name\tdescription");
+			TextFileWriter snpWriter = new TextFileWriter(outSnpFilename);
+			snpWriter.writeLine("#snp\tsource\tsource ID\tsource name\tdescription");
+			TextFileWriter mutWriter = new TextFileWriter(outMutationFilename);
+			mutWriter.writeLine("#snp\tsource\tsource ID\tsource name\tdescription");
+
 			Uniprot uniprot = null;
 
 			File[] xmlFiles = FileUtils.listFiles(new File(chunksDirname), ".+.xml", true);
-			
+
 			// for testing purposes
 			xmlFiles = new File[] {xmlFiles[0], xmlFiles[1]};
 			//			List<File> xmlFiles = new ArrayList<File>();
 			//			xmlFiles.add(new File("/home/jtarraga/bioinfo/uniprot/chunks/chunk_entry_007.xml"));
+			int position;
 			for(File file: xmlFiles) {
 
 				System.out.println("searching in " + file.getAbsolutePath() + "...");
@@ -52,33 +59,41 @@ public class UniprotParserTest {
 					List<FeatureType> features = entry.getFeature();
 					if (features!=null && features.size()>0) {
 						for(FeatureType f: features) {
-							if (f.getDescription()!=null && f.getDescription().contains("dbSNP")) {
-
-								snpIds.clear();
-								descs.clear();
-
-								values = StringUtils.toList(f.getDescription(), ";");
-								for(String value: values) {
-									if (value.contains("dbSNP")) {
-										ids = value.split("dbSNP:");
-										//										System.out.println("value = " + value);
-										for(String id: ids) {
-											if (id.startsWith("rs")) {
-												id = id.split(" ")[0].replace(")", "");
-												//												System.out.println("id: " + id);
-												snpIds.add(id);
+							if(f.getType().equalsIgnoreCase("sequence variant")) {
+								if (f.getDescription()!=null && f.getDescription().contains("dbSNP")) {
+									snpIds.clear();
+									descs.clear();
+									values = StringUtils.toList(f.getDescription(), ";");
+									for(String value: values) {
+										if (value.contains("dbSNP")) {
+											ids = value.split("dbSNP:");
+											//										System.out.println("value = " + value);
+											for(String id: ids) {
+												if (id.startsWith("rs")) {
+													id = id.split(" ")[0].replace(")", "");
+													//												System.out.println("id: " + id);
+													snpIds.add(id);
+												}
 											}
+										} else {
+											descs.add(value);
 										}
-									} else {
-										descs.add(value);
 									}
-								}
-
-								if (snpIds!=null && snpIds.size()>0) {
-									description = ListUtils.toString(descs, ";");
-									if (description.startsWith("(")) description = description.substring(1);
-									for(String snpId: snpIds) {
-										writer.writeLine(snpId + "\tuniprot\t" + entry.getAccession().get(0) + "\t" + entry.getName().get(0) + "\t" + description);
+									if (snpIds!=null && snpIds.size()>0) {
+										description = ListUtils.toString(descs, ";");
+										if (description.startsWith("(")){
+											description = description.substring(1);
+										}
+										for(String snpId: snpIds) {
+											snpWriter.writeLine(snpId + "\tuniprot\t" + entry.getAccession().get(0) + "\t" + entry.getName().get(0) + "\t" + description);
+										}
+									}
+								}else {
+									if(f.getLocation().getPosition() != null) {
+										position = f.getLocation().getPosition().getPosition().intValue();
+										System.out.println(f.getId()+"\t"+"p."+f.getOriginal()+position+f.getVariation().toString()+"\t"+f.getVariation().size() +"\t"+f.getOriginal()+position +"\t"+ position+"\t"+f.getDescription());	
+										
+//										mutWriter.writeLine(f.getId()+"\t"+f.getOriginal()+"\t"+f.getLocation().getPosition().getPosition()+"\t"+f.getDescription());
 									}
 								}
 							}
@@ -87,9 +102,11 @@ public class UniprotParserTest {
 				}				
 			}
 
-			writer.close();
+			snpWriter.close();
+			mutWriter.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.toString());
 		}
 
 	}
@@ -195,7 +212,8 @@ public class UniprotParserTest {
 			while(!endOfId) {
 				snpId += line.charAt(beginIndex);
 				beginIndex++;
-				endOfId = !isDigit(line.charAt(beginIndex));
+//				endOfId = !isDigit(line.charAt(beginIndex));
+				endOfId = !Character.isDigit(line.charAt(beginIndex));
 			}
 			//System.out.println("endIndex = " + endIndex);
 			//snpId = line.substring(beginIndex + 6, endIndex); //, line.indexOf(" ", beginIndex + 7));
@@ -214,6 +232,7 @@ public class UniprotParserTest {
 		return ListUtils.unique(res);
 	}
 
+	@Deprecated
 	private boolean isDigit(char c) {
 		if (c=='0' || c=='1' || c=='2' || c=='3' || c=='4' || c=='5' || c=='6' || c=='7' || c=='8' || c=='9') {
 			return true;

@@ -1,8 +1,5 @@
 package org.bioinfo.formats.parser.biopax;
 
-import java.io.IOException;
-
-import org.jdom.JDOMException;
 import org.junit.Test;
 
 
