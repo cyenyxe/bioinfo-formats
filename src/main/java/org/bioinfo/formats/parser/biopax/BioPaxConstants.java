@@ -3,7 +3,6 @@ package org.bioinfo.formats.parser.biopax;
 import java.util.List;
 
 import org.bioinfo.commons.utils.StringUtils;
-//import org.jdom.Namespace;
 import org.dom4j.Namespace;
 
 public class BioPaxConstants {
