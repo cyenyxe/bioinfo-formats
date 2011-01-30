@@ -10,10 +10,10 @@ import java.util.List;
 import org.bioinfo.commons.io.utils.FileUtils;
 import org.bioinfo.commons.io.utils.IOUtils;
 import org.bioinfo.formats.commons.AbstractFormatReader;
-import org.bioinfo.formats.core.call.Vcf;
+import org.bioinfo.formats.core.call.VcfRecord;
 import org.bioinfo.formats.exception.FileFormatException;
 
-public class VcfReader extends AbstractFormatReader<Vcf> {
+public class VcfReader extends AbstractFormatReader<VcfRecord> {
 
 //	private File file;
 	private BufferedReader bufferedReader;
@@ -29,8 +29,8 @@ public class VcfReader extends AbstractFormatReader<Vcf> {
 	}
 	
 	public VcfReader(File file) throws IOException, FileFormatException {
-		this.file = file;
 		FileUtils.checkFile(file);
+		this.file = file;
 		
 		infos = new ArrayList<Info>();
 		filters = new ArrayList<Filter>();
@@ -77,7 +77,7 @@ public class VcfReader extends AbstractFormatReader<Vcf> {
 	}
 	
 	@Override
-	public Vcf read() throws FileFormatException {
+	public VcfRecord read() throws FileFormatException {
 		String line;
 		try {
 //			line = bufferedReader.readLine();
@@ -90,7 +90,7 @@ public class VcfReader extends AbstractFormatReader<Vcf> {
 				for(int i=8; i<fields.length; i++) {
 					format.append(fields[i]).append("\t");
 				}
-				return new Vcf(fields[0], Integer.parseInt(fields[1]), fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], format.toString().trim());
+				return new VcfRecord(fields[0], Integer.parseInt(fields[1]), fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], format.toString().trim());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -99,25 +99,25 @@ public class VcfReader extends AbstractFormatReader<Vcf> {
 	}
 
 	@Override
-	public Vcf read(String regexFilter) throws FileFormatException {
+	public VcfRecord read(String regexFilter) throws FileFormatException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Vcf> read(int size) throws FileFormatException {
+	public List<VcfRecord> read(int size) throws FileFormatException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Vcf> readAll() throws FileFormatException {
+	public List<VcfRecord> readAll() throws FileFormatException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Vcf> readAll(String pattern) throws FileFormatException {
+	public List<VcfRecord> readAll(String pattern) throws FileFormatException {
 		// TODO Auto-generated method stub
 		return null;
 	}

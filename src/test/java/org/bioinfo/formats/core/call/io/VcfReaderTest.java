@@ -2,7 +2,7 @@ package org.bioinfo.formats.core.call.io;
 
 import static org.junit.Assert.fail;
 
-import org.bioinfo.formats.core.call.Vcf;
+import org.bioinfo.formats.core.call.VcfRecord;
 import org.junit.Test;
 
 public class VcfReaderTest {
@@ -12,9 +12,9 @@ public class VcfReaderTest {
 		System.out.println("\nTest 1 - read()");
 		try {
 			VcfReader vcfReader = new VcfReader("/mnt/commons/test/formats/features/snps.vcf");
-			Vcf vcf = null;
-			while((vcf = vcfReader.read()) != null) {
-				System.out.println(vcf.toString());
+			VcfRecord vcfRecord = null;
+			while((vcfRecord = vcfReader.read()) != null) {
+				System.out.println(vcfRecord.toString());
 			}
 			vcfReader.close();
 		} catch (Exception e) {
