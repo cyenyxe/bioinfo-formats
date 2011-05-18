@@ -35,8 +35,12 @@ public class Dot {
 	
 	public void addEdge(Edge edge) {
 		edges.add(edge);
-		nodes.put(edge.getSrcName(), edge.getSource());
-		nodes.put(edge.getDestName(), edge.getDestination());
+		if (!nodes.containsKey(edge.getSrcName())) {
+			nodes.put(edge.getSrcName(), edge.getSource());
+		}
+		if (!nodes.containsKey(edge.getDestName())) {
+			nodes.put(edge.getDestName(), edge.getDestination());
+		}
 	}
 	
 	public String toString() {
@@ -55,11 +59,11 @@ public class Dot {
 		}
 		
 		for(String key: nodes.keySet()) {
-			sb.append("\t").append(nodes.get(key).toString()).append(";\n");			
+			sb.append("\t").append(nodes.get(key).toString());			
 		}
 		
 		for(Edge edge: edges) {
-			sb.append("\t").append(edge.toString()).append(";\n");			
+			sb.append("\t").append(edge.toString());			
 		}
 		
 		sb.append("}\n");
