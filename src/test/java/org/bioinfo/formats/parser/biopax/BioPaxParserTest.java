@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.bioinfo.commons.utils.ListUtils;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 
 public class BioPaxParserTest {

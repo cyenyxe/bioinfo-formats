@@ -20,6 +20,7 @@ import org.junit.Test;
 
 public class UniprotParserTest {
 
+	@Test
 	public void getNamesAndFunctionFromUniprot() {
 
 		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
@@ -92,8 +93,8 @@ public class UniprotParserTest {
 
 	}
 
-	public void testLoadXMLInfo() {
-
+	@Test
+	public void getSnpFromUniprot() {
 		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
 		String outSnpFilename = "/mnt/commons/formats/uniprot/snp_in_uniprot2.txt";
 		String outMutationFilename = "/mnt/commons/formats/uniprot/mutation_in_uniprot2.txt";
