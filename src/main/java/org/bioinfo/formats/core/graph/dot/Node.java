@@ -8,6 +8,8 @@ public class Node {
 	private String name = null;
 	private Map<String, String> attrs = new HashMap<String, String>();
 
+	public static final String FILL_COLOR = "fillcolor";
+	
 	public Node(String name) {
 		this.name = name;
 	}

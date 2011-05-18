@@ -15,6 +15,7 @@ public class DotTest {
 		Node node1 = new Node("node_1");
 		node1.setAttribute("label", "Node #1");
 		node1.setAttribute("fillcolor", "red");
+		node1.setAttribute(Node.FILL_COLOR, "red");
 		node1.setAttribute("shape", "box");
 		node1.setAttribute("style", "filled");
 		dot.addNode(node1);
