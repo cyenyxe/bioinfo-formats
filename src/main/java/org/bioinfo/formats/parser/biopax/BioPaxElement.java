@@ -49,4 +49,8 @@ public class BioPaxElement {
 	public void setId(String id) {
 		Id = id;
 	}
+
+	public Map<String, List<String>> getParams() {
+		return params;
+	}
 }
