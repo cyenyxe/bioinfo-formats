@@ -192,5 +192,11 @@ public class FastaQReader extends AbstractFormatReader<FastQ> {
 			throw new FileFormatException("Quality and Sequence lenghts are different in Fasta " + id);			
 		}
 	}
+
+	@Override
+	public List<FastQ> read(int size) throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

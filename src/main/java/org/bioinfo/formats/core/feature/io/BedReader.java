@@ -24,20 +24,6 @@ public class BedReader extends AbstractFormatReader<Bed> {
 	}
 
 	@Override
-	public List<Bed> readAll() throws FileFormatException {
-		try {
-			return beanReader.readAll();
-		} catch (Exception e) {
-			throw new FileFormatException(e);
-		}
-	}
-
-	@Override
-	public List<Bed> readAll(String filter) {
-		return null;
-	}
-
-	@Override
 	public Bed read() throws FileFormatException {
 		try {
 			return beanReader.read();
@@ -47,13 +33,44 @@ public class BedReader extends AbstractFormatReader<Bed> {
 	}
 
 	@Override
-	public int size() throws IOException {
-		return IOUtils.countLines(file);
+	public Bed read(String pattern) throws FileFormatException {
+		try {
+			return beanReader.read(pattern);
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		}
+	}
+	
+	@Override
+	public List<Bed> read(int number) throws FileFormatException {
+		try {
+			return beanReader.read(number);
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		}
 	}
 
 	@Override
-	public Bed read(String regexFilter) throws FileFormatException {
-		return null;
+	public List<Bed> readAll() throws FileFormatException {
+		try {
+			return beanReader.readAll();
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		}
+	}
+
+	@Override
+	public List<Bed> readAll(String pattern) throws FileFormatException {
+		try {
+			return beanReader.readAll(pattern);
+		} catch (Exception e) {
+			throw new FileFormatException(e);
+		}
+	}
+
+	@Override
+	public int size() throws IOException {
+		return IOUtils.countLines(file);
 	}
 
 	@Override

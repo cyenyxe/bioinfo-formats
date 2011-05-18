@@ -1,10 +1,9 @@
 package org.bioinfo.formats.parser.biopax;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bioinfo.commons.utils.StringUtils;
-import org.jdom.Namespace;
+import org.dom4j.Namespace;
 
 public class BioPaxConstants {
 
@@ -16,7 +15,7 @@ public class BioPaxConstants {
 	public static final String OWL_NAMESPACE_URI = "http://www.w3.org/2002/07/owl";
 	public static final String OWL_NAMESPACE_PREFIX = "owl";	
 
-	public static final Namespace OWL_NAMESPACE = Namespace.getNamespace(BioPaxConstants.OWL_NAMESPACE_PREFIX, BioPaxConstants.OWL_NAMESPACE_URI);
+	public static final Namespace OWL_NAMESPACE = Namespace.get(BioPaxConstants.OWL_NAMESPACE_PREFIX, BioPaxConstants.OWL_NAMESPACE_URI);
 
 
 	// RDF
@@ -30,7 +29,7 @@ public class BioPaxConstants {
 	public static final String RDF_NAMESPACE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
 	public static final String RDF_NAMESPACE_PREFIX = "rdf";	
 
-	public static final Namespace RDF_NAMESPACE = Namespace.getNamespace(BioPaxConstants.RDF_NAMESPACE_PREFIX, BioPaxConstants.RDF_NAMESPACE_URI);
+	public static final Namespace RDF_NAMESPACE = Namespace.get(BioPaxConstants.RDF_NAMESPACE_PREFIX, BioPaxConstants.RDF_NAMESPACE_URI);
 
 
 	// BIOPAX
@@ -38,7 +37,7 @@ public class BioPaxConstants {
 	public static final String BIOPAX_LEVEL_3_NAMESPACE_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
 	public static final String BIOPAX_NAMESPACE_PREFIX = "bp";	
 
-	public static final Namespace BIOPAX_LEVEL_3_NAMESPACE = Namespace.getNamespace(BioPaxConstants.BIOPAX_NAMESPACE_PREFIX, BioPaxConstants.BIOPAX_LEVEL_3_NAMESPACE_URI);
+	public static final Namespace BIOPAX_LEVEL_3_NAMESPACE = Namespace.get(BioPaxConstants.BIOPAX_NAMESPACE_PREFIX, BioPaxConstants.BIOPAX_LEVEL_3_NAMESPACE_URI);
 
 	public static final List<String> BIOPAX_GENE_LIST = StringUtils.toList("Gene");
 	public static final List<String> BIOPAX_INTERACTION_LIST = StringUtils.toList("Interaction,Control,Catalysis,Modulation,TemplateReactionRegulation,Conversion,BiochemicalReaction,ComplexAssembly,Degradation,Transport,TransportWithBiochemicalReaction,GeneticInteraction,MolecularInteraction,TemplateReaction");

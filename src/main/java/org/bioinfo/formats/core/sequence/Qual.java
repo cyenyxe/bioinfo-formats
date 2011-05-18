@@ -2,6 +2,7 @@ package org.bioinfo.formats.core.sequence;
 
 import org.bioinfo.commons.utils.ArrayUtils;
 
+
 public class Qual {
 
 	/** Qual ID */

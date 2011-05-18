@@ -152,6 +152,12 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 	private void checkSequence(String sequence) throws FileFormatException {
 		// Por ahora no hacemos comprobacion alguna y nos creemos que la secuencia viene bien
 	}
+
+	@Override
+	public List<Fasta> read(int size) throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

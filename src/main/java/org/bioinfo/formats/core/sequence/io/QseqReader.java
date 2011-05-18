@@ -111,4 +111,10 @@ public class QseqReader extends AbstractFormatReader<Qseq> {
 		return size;
 	}
 
+	@Override
+	public List<Qseq> read(int size) throws FileFormatException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
