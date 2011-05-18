@@ -28,8 +28,8 @@ public class DotTest {
 		
 		Edge edge = new Edge(node1, node2, true);
 		edge.setAttribute("label", "control");
-		
 		dot.addEdge(edge);
+				
 		try {
 			dot.save(new File("/mnt/commons/test/formats/" + dot.getName() + ".dot"));
 		} catch (IOException e) {
