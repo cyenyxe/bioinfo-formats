@@ -58,7 +58,7 @@ public class Dot {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(directed ? "digraph " : "graph ").append(name).append(" {\n");			
+		sb.append(directed ? "digraph " : "graph \"").append(name).append("\" {\n");			
 		if(attrs!=null && attrs.size()>0) {
 			for(String key: attrs.keySet()) {
 				sb.append("\t");
