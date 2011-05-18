@@ -44,6 +44,9 @@ public class Edge {
 		this.directed = directed;
 		this.src = src;
 		this.dest = dest;
+		
+		this.srcName = src.getName();
+		this.destName = dest.getName();
 	}
 	
 	public Edge(Node src, Node dest, Map<String, String> attrs) {
@@ -55,6 +58,9 @@ public class Edge {
 		this.src = src;
 		this.dest = dest;
 		this.attrs = attrs;
+		
+		this.srcName = src.getName();
+		this.destName = dest.getName();
 	}
 	
 	public String toString() {

@@ -1,9 +1,13 @@
 package org.bioinfo.formats.core.graph.dot;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.bioinfo.commons.io.utils.IOUtils;
 
 public class Dot {
 
@@ -43,6 +47,14 @@ public class Dot {
 		}
 	}
 	
+	public void save(String filename) throws IOException {
+		IOUtils.write(filename, toString());
+	}
+	
+	public void save(File file) throws IOException {
+		IOUtils.write(file, toString());
+	}	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
@@ -81,5 +93,13 @@ public class Dot {
 	
 	public Map<String, String> getAttributes() {
 		return attrs;
-	}	
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }
