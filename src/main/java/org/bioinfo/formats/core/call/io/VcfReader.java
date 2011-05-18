@@ -10,7 +10,6 @@ import java.util.List;
 import org.bioinfo.commons.io.utils.FileUtils;
 import org.bioinfo.commons.io.utils.IOUtils;
 import org.bioinfo.formats.commons.AbstractFormatReader;
-import org.bioinfo.formats.core.call.VcfRecord;
 import org.bioinfo.formats.exception.FileFormatException;
 
 public class VcfReader extends AbstractFormatReader<VcfRecord> {
