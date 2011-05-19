@@ -4,6 +4,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Edge {
+
+	public static String ARROWHEAD = "arrowhead";
+	public enum ARROWHEAD_VALUES {box, crow, diamond, dot, ediamond, empty, halfopen, inv, invempty, invdot, invodot, none, normal, obox, odiamond, odot, open, tee, vee};	
+	public static String ARROWSIZE = "arrowsize";
+	public static String ARROWTAIL = "arrowtail";
+	public enum ARROWTAIL_VALUES {box, crow, diamond, dot, ediamond, empty, halfopen, inv, invempty, invdot, invodot, none, normal, obox, odiamond, odot, open, tee, vee};	
+	public static String COLOR = "color";
+	public static String COMMENT = "comment";
+	public static String CONSTRAINT = "constraint";
+	public static String DECORATE = "decorate";
+	public static String DIR = "dir";
+	public enum DIR_VALUES {forward,back,both,none};	
+	public static String FONTCOLOR = "fontcolor";
+	public static String FONTNAME = "fontname";
+	public static String FONTSIZE = "fontsize";
+	public static String HEADLABEL = "headlabel";
+	public static String HEADPORT = "headport";
+	public enum HEADPORT_VALUES {n,ne,e,se,s,sw,w,nw};	
+	public static String HEADURL = "headURL";
+	public static String LABEL = "label";
+	public static String LABELANGLE = "labelangle";
+	public static String LABELDISTANCE = "labeldistance";
+	public static String LABELFLOAT = "labelfloat";
+	public static String LABELFONTCOLOR = "labelfontcolor";
+	public static String LABELFONTNAME = "labelfontname";
+	public static String LABELFONTSIZE = "labelfontsize";
+	public static String LAYER = "layer";
+	public static String LHEAD = "lhead";
+	public static String LTAIL = "ltail";
+	public static String MINLEN = "minlen";
+	public static String SAMEHEAD = "samehead";
+	public static String SAMETAIL = "sametail";
+	public static String STYLE = "style";
+	public enum STYLE_VALUES {bold, dashed, dotted, invisible, solid};
+	public static String TAILLABEL = "taillabel";
+	public static String TAILPORT = "tailport";
+	public enum TAILPORT_VALUES {n,ne,e,se,s,sw,w,nw};	
+	public static String TAILURL = "tailURL";
+	public static String weight = "weight";
 	
 	private boolean directed = true;
 	

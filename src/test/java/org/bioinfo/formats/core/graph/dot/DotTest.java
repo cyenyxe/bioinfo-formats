@@ -11,23 +11,26 @@ public class DotTest {
 	@Test
 	public void Test1() {
 		Dot dot = new Dot("toto", true);
+		dot.setAttribute(Dot.BGCOLOR, "white");
+		dot.setAttribute(Dot.ORIENTATION, Dot.ORIENTATION_VALUES.landscape.name());
 		
 		Node node1 = new Node("node_1");
-		node1.setAttribute("label", "Node #1");
-		node1.setAttribute("fillcolor", "red");
-		node1.setAttribute("shape", "box");
-		node1.setAttribute("style", "filled");
+		node1.setAttribute(Node.LABEL, "Node #1");
+		node1.setAttribute(Node.FILLCOLOR, "red");
+		node1.setAttribute(Node.SHAPE, Node.SHAPE_VALUES.box3d.name());
+		node1.setAttribute(Node.STYLE, Node.STYLE_VALUES.filled.name());
 		dot.addNode(node1);
 		
 		Node node2 = new Node("node_2");
-		node2.setAttribute("label", "Node #2");
-		node2.setAttribute("fillcolor", "blue");
-		node2.setAttribute("shape", "box");
-		node2.setAttribute("style", "rounded,filled");
+		node2.setAttribute(Node.LABEL, "Node #2");
+		node2.setAttribute(Node.FILLCOLOR, "blue");
+		node2.setAttribute(Node.SHAPE, Node.SHAPE_VALUES.component.name());
+		node2.setAttribute(Node.STYLE, Node.STYLE_VALUES.rounded.name() + "," + Node.STYLE_VALUES.filled.name());
 		dot.addNode(node2);
 		
 		Edge edge = new Edge(node1, node2, true);
-		edge.setAttribute("label", "control");
+		edge.setAttribute(Edge.LABEL, "control");
+		edge.setAttribute(Edge.ARROWHEAD, Edge.ARROWHEAD_VALUES.diamond.name());
 		dot.addEdge(edge);
 				
 		try {
