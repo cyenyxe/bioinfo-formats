@@ -14,6 +14,7 @@ public class Node {
 	public static String FONTNAME = "fontname";
 	public static String GROUP = "group";
 	public static String HEIGHT = "height";
+	public static String ID = "id";
 	public static String LABEL = "label";
 	public static String LAYER = "layer";
 	public static String ORIENTATION = "orientation";
