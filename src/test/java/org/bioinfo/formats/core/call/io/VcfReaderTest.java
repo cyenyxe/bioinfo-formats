@@ -2,6 +2,7 @@ package org.bioinfo.formats.core.call.io;
 
 import static org.junit.Assert.fail;
 
+import org.bioinfo.formats.core.call.Vcf4;
 import org.bioinfo.formats.core.call.vcf4.VcfRecord;
 import org.junit.Test;
 
@@ -13,10 +14,15 @@ public class VcfReaderTest {
 
 		try {
 			Vcf4Reader vcf4Reader = new Vcf4Reader("/mnt/commons/test/formats/features/example_1000genomes_40000.vcf");
-			VcfRecord vcfRecord = null;
-			while((vcfRecord = vcf4Reader.read()) != null) {
-//				System.out.println(vcfRecord.toString());
-			}
+			
+			Vcf4 vcf4 = vcf4Reader.parse(); 
+			
+			System.out.println(vcf4.getRecords().toString());
+			
+//			VcfRecord vcfRecord = null;
+//			while((vcfRecord = vcf4Reader.read()) != null) {
+////				System.out.println(vcfRecord.toString());
+//			}
 			vcf4Reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
