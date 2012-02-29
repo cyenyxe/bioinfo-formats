@@ -16,14 +16,14 @@ public class DotTest {
 		
 		Node node1 = new Node("node_1");
 		node1.setAttribute(Node.LABEL, "Node #1");
-		node1.setAttribute(Node.FILLCOLOR, "red");
+		node1.setAttribute(Node.FILLCOLOR, "#CCFFFF");
 		node1.setAttribute(Node.SHAPE, Node.SHAPE_VALUES.box3d.name());
 		node1.setAttribute(Node.STYLE, Node.STYLE_VALUES.filled.name());
 		dot.addNode(node1);
 		
 		Node node2 = new Node("node_2");
 		node2.setAttribute(Node.LABEL, "Node #2");
-		node2.setAttribute(Node.FILLCOLOR, "blue");
+		node2.setAttribute(Node.FILLCOLOR, "#CCFFCC");
 		node2.setAttribute(Node.SHAPE, Node.SHAPE_VALUES.component.name());
 		node2.setAttribute(Node.STYLE, Node.STYLE_VALUES.rounded.name() + "," + Node.STYLE_VALUES.filled.name());
 		dot.addNode(node2);
