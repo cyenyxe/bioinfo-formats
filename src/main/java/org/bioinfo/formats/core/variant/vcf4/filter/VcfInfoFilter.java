@@ -2,7 +2,6 @@ package org.bioinfo.formats.core.variant.vcf4.filter;
 
 import java.util.Arrays;
 
-import org.bioinfo.commons.utils.StringUtils;
 import org.bioinfo.formats.core.variant.vcf4.VcfRecord;
 
 public class VcfInfoFilter implements VcfGenericFilter {

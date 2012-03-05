@@ -16,11 +16,12 @@ public class VcfRegionFilter implements VcfGenericFilter {
 	
 	@Override
 	public boolean filter(VcfRecord vcfRecord) {
-		if(vcfRecord.getChromosome().equals(chromosome) && vcfRecord.getPosition() >= start && vcfRecord.getPosition() <= end) {
-			return true;
-		}else {
-			return false;
-		}
+		return (vcfRecord.getChromosome().equalsIgnoreCase(chromosome) && vcfRecord.getPosition() > start && vcfRecord.getPosition() < end);
+//		if(vcfRecord.getChromosome().equals(chromosome) && vcfRecord.getPosition() >= start && vcfRecord.getPosition() <= end) {
+//			return true;
+//		}else {
+//			return false;
+//		}
 	}
 
 	
