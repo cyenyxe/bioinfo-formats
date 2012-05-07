@@ -34,7 +34,7 @@ public class UniprotParser {
 		obj =  unmarshaller.unmarshal(new File(filename));
 		return obj;
 	}
-	
+
 	/**
 	 * Checks if XML info file exists and loads it
 	 * @throws JAXBException 
