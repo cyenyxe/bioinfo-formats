@@ -13,11 +13,12 @@ import javax.xml.bind.Unmarshaller;
 
 public class PsiParser {
 
-	private final static String PSI25_CONTEXT = "org.bioinfo.formats.parser.psi.v25jaxb";
+	public final static String PSI253_CONTEXT = "org.bioinfo.formats.parser.psi.v253jaxb";
+	public final static String PSI254_CONTEXT = "org.bioinfo.formats.parser.psi.v254jaxb";
 	
 	public static void saveXMLInfo(Object obj, String filename) throws FileNotFoundException, JAXBException {
 		JAXBContext jaxbContext;
-		jaxbContext = JAXBContext.newInstance(PSI25_CONTEXT);
+		jaxbContext = JAXBContext.newInstance(PSI254_CONTEXT);
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		marshaller.marshal(obj, new FileOutputStream(filename));	
 	}
@@ -29,7 +30,22 @@ public class PsiParser {
 	 */
 	public static Object loadXMLInfo(String filename) throws JAXBException {
 		Object obj = null;
-		JAXBContext jaxbContext = JAXBContext.newInstance(PSI25_CONTEXT);
+		JAXBContext jaxbContext = JAXBContext.newInstance(PSI254_CONTEXT);
+		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+		obj =  unmarshaller.unmarshal(new File(filename));
+		return obj;
+	}
+	
+	/**
+	 * 
+	 * @param filename
+	 * @param psiVersion
+	 * @return
+	 * @throws JAXBException
+	 */
+	public static Object loadXMLInfo(String filename, String psiVersion) throws JAXBException {
+		Object obj = null;
+		JAXBContext jaxbContext = JAXBContext.newInstance(psiVersion);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		obj =  unmarshaller.unmarshal(new File(filename));
 		return obj;

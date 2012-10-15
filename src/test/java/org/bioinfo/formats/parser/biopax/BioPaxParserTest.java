@@ -52,9 +52,9 @@ public class BioPaxParserTest {
 		}
 	}
 
-
+	@Test
 	public void Test0() {
-		String filename = "/mnt/commons/formats/reactome/Homo sapiens.owl";
+		String filename = "/home/imedina/Downloads/reactome-biopax/Homo sapiens.owl";
 
 
 		try {
