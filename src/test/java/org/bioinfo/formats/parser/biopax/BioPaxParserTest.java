@@ -7,7 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.bioinfo.commons.utils.ListUtils;
+import org.bioinfo.infrared.lib.common.BiopaxPathway;
+import org.bioinfo.infrared.lib.common.Interaction;
+import org.bioinfo.infrared.lib.common.PhysicalEntity;
+import org.bioinfo.infrared.lib.common.SubPathway;
+import org.bson.BSON;
+import org.bson.BSONObject;
 import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.util.JSON;
 
 
 public class BioPaxParserTest {
@@ -52,27 +66,211 @@ public class BioPaxParserTest {
 		}
 	}
 
+	
 	@Test
-	public void Test0() {
-		String filename = "/home/imedina/Downloads/reactome-biopax/Homo sapiens.owl";
-
+	public void makeJson() {
+		String filename = "/mnt/commons/formats/reactome/Homo sapiens.owl";
 
 		try {
+			Mongo m = new Mongo("localhost", 27017);
+			DB db = m.getDB("reactome");
+			DBCollection coll = db.getCollection("pathway");		
 			BioPaxParser parser = new BioPaxParser(filename);
 			bioPax = parser.parse();
-
-			visitNode("Dissociation_of_beta_catenin_from_Axin_and_association_of_beta_catenin_with_phospho__20_aa__APC_in_the_detruction_complex", "");
-
-			String name = "Signaling_by_Wnt";
-			//name = "Degradation_of_beta_catenin_by_the_destruction_complex";
-
-			System.out.println("************** " + bioPax.getElementMap().get(name).getBioPaxClassName() + " : " + bioPax.getElementMap().get(name).getId());
-
-			List<String> componentIds = getComponents(name, "");
-			System.out.println("componentIds = " + componentIds.size());
-			for(String id: componentIds) {
-				System.out.println("**** " + bioPax.getElementMap().get(id).getBioPaxClassName() + " : " + bioPax.getElementMap().get(id).getId());
+			
+			List<BiopaxPathway> pathwayList = new ArrayList<BiopaxPathway>();
+			List<DBObject> dbObjList = new ArrayList<DBObject>();
+			Gson g = new Gson();
+			
+			System.out.println("Pathway list: ");
+			int cont = 0;
+//			String pathway = "Initiation_of_checkpoint_signal_from_defective_kinetochores";
+			for(String pathway: bioPax.getPathwayList() ) {
+				System.out.println("Pathway: "+pathway);
+				if(cont++ == 1) break;
+				
+				String name = bioPax.getElementMap().get(pathway).getId();
+				Map<String, List<String>> params = bioPax.getElementMap().get(pathway).getParams();
+				List<String> species = params.get("organism-id");
+				List<String> displayName = params.get("displayName");
+				List<String> xref = params.get("xref-id");
+				BiopaxPathway p = new BiopaxPathway(name, "Reactome", "Reactome", "39", species, displayName, xref);
+				List<String> pathwayComponents = params.get("pathwayComponent-id");
+				
+				// loop pathway components
+				if(pathwayComponents != null) {
+					for(String component: pathwayComponents) {
+						String type = bioPax.getElementMap().get(component).getBioPaxClassName();
+						if(type.equalsIgnoreCase("Pathway")) {
+							SubPathway sp = searchSubPathways(component, p);
+							if(sp != null) p.subPathways.add(sp);
+						}
+						else if(type.equalsIgnoreCase("GeneticInteraction") || type.equalsIgnoreCase("MolecularInteraction") || type.equalsIgnoreCase("TemplateReaction") || type.equalsIgnoreCase("Catalysis") || type.equalsIgnoreCase("Modulation") || type.equalsIgnoreCase("TemplateReactionRegulation") || type.equalsIgnoreCase("BiochemicalReaction") || type.equalsIgnoreCase("ComplexAssembly") || type.equalsIgnoreCase("Degradation") || type.equalsIgnoreCase("Transport") || type.equalsIgnoreCase("TransportWithBiochemicalReaction")) {
+							Map<String, List<String>> interactionParams = bioPax.getElementMap().get(component).getParams();
+							p.interactions.add(new Interaction(bioPax.getElementMap().get(component).getId(), type, interactionParams));
+//							System.out.println("Found interaction: "+type);
+							p.allInteractionsIDs.add(bioPax.getElementMap().get(component).getId());
+							
+							addPhysicalEntities(component, p, false);
+						}
+//						else if(type.equalsIgnoreCase("PhysicalEntity") || type.equalsIgnoreCase("Complex") || type.equalsIgnoreCase("DNA") || type.equalsIgnoreCase("DNARegion") || type.equalsIgnoreCase("Protein") || type.equalsIgnoreCase("RNA") || type.equalsIgnoreCase("RNARegion") || type.equalsIgnoreCase("SmallMolecule")) {
+//							System.out.println("Found physical entity: "+type);
+//							p.physicalEntities.add(new PhysicalEntity(bioPax.getElementMap().get(component).getId()));
+//						}
+					}
+				}
+				pathwayList.add(p);
+				dbObjList.add((DBObject)JSON.parse(g.toJson(p)));
+				
+				System.out.println("JSON: ");
+				System.out.println(g.toJson(p));
+				
+				BSONObject b = (BSONObject)JSON.parse(g.toJson(p));
+				System.out.println("BSON: ");
+				System.out.println(BSON.encode(b));
+				
 			}
+//			String json = g.toJson(pathwayList);
+//			System.out.println(json);
+
+//			coll.insert(dbObjList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public SubPathway searchSubPathways(String component, BiopaxPathway pathway) {
+		String type = bioPax.getElementMap().get(component).getBioPaxClassName();
+		
+		if(type.equalsIgnoreCase("Pathway")) {
+			SubPathway sp = new SubPathway(component);
+			if(bioPax.getElementMap().get(component).getParams().get("pathwayComponent-id") != null) {
+				sp.subPathways  = new ArrayList<SubPathway>();
+//				System.out.println("Component ID with pathway components: "+bioPax.getElementMap().get(component).getId()+" -- "+bioPax.getElementMap().get(component).getParams().get("pathwayComponent-id").size());
+				for(String subcomponent: bioPax.getElementMap().get(component).getParams().get("pathwayComponent-id")) {
+//					System.out.println("SubComponent ID: "+bioPax.getElementMap().get(subcomponent).getId());
+					SubPathway sp2 = searchSubPathways(subcomponent, pathway);
+					if(sp2 != null) sp.subPathways.add(sp2);
+				}
+			}
+			return sp;
+		}
+		else if(type.equalsIgnoreCase("GeneticInteraction") || type.equalsIgnoreCase("MolecularInteraction") || type.equalsIgnoreCase("TemplateReaction") || type.equalsIgnoreCase("Catalysis") || type.equalsIgnoreCase("Modulation") || type.equalsIgnoreCase("TemplateReactionRegulation") || type.equalsIgnoreCase("BiochemicalReaction") || type.equalsIgnoreCase("ComplexAssembly") || type.equalsIgnoreCase("Degradation") || type.equalsIgnoreCase("Transport") || type.equalsIgnoreCase("TransportWithBiochemicalReaction")) {
+//			System.out.println("Found interaction: "+type+" in subpathway");
+//			p.interactions.add(new Interaction(bioPax.getElementMap().get(component).getId()));
+			String interaction = bioPax.getElementMap().get(component).getId();
+			pathway.allInteractionsIDs.add(interaction);
+			addPhysicalEntities(interaction, pathway, true);
+		}
+//		else if(type.equalsIgnoreCase("PhysicalEntity") || type.equalsIgnoreCase("Complex") || type.equalsIgnoreCase("DNA") || type.equalsIgnoreCase("DNARegion") || type.equalsIgnoreCase("Protein") || type.equalsIgnoreCase("RNA") || type.equalsIgnoreCase("RNARegion") || type.equalsIgnoreCase("SmallMolecule")) {
+//			System.out.println("Found physical entity: "+type+" in subpathway");
+////			p.physicalEntities.add(new PhysicalEntity(bioPax.getElementMap().get(component).getId()));
+//		}
+		else System.out.println("Another type: "+type+" found.");
+		return null;
+	}
+	
+	public void addPhysicalEntities(String interaction, BiopaxPathway pathway, boolean onlyIDs) {
+		String type = bioPax.getElementMap().get(interaction).getBioPaxClassName();
+		List<String> tempList = new ArrayList<String>();
+		
+		if(type.equalsIgnoreCase("GeneticInteraction") || type.equalsIgnoreCase("MolecularInteraction")) {
+			if(bioPax.getElementMap().get(interaction).getParams().get("participant") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("participant"));
+			}
+		}
+		else if(type.equalsIgnoreCase("TemplateReaction")) {
+			if(bioPax.getElementMap().get(interaction).getParams().get("template") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("template"));
+			}
+			if(bioPax.getElementMap().get(interaction).getParams().get("product") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("product"));
+			}
+		}
+		else if(type.equalsIgnoreCase("Catalysis")) {
+			if(bioPax.getElementMap().get(interaction).getParams().get("cofactor") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("cofactor"));
+			}
+			if(bioPax.getElementMap().get(interaction).getParams().get("controller") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("controller"));
+			}
+			if(bioPax.getElementMap().get(interaction).getParams().get("controlled") != null) {
+				for(String catalysis: bioPax.getElementMap().get(interaction).getParams().get("controlled")) {
+					addPhysicalEntities(catalysis, pathway, onlyIDs);
+				}
+			}
+		}
+		else if(type.equalsIgnoreCase("Modulation")) {
+			if(bioPax.getElementMap().get(interaction).getParams().get("controller") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("controller"));
+			}
+			if(bioPax.getElementMap().get(interaction).getParams().get("controlled") != null) {
+				for(String catalysis: bioPax.getElementMap().get(interaction).getParams().get("controlled")) {
+					addPhysicalEntities(catalysis, pathway, onlyIDs);
+				}
+			}
+		}
+		else if(type.equalsIgnoreCase("TemplateReactionRegulation")) {
+			if(bioPax.getElementMap().get(interaction).getParams().get("controller") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("controller"));
+			}
+			if(bioPax.getElementMap().get(interaction).getParams().get("controlled") != null) {
+				for(String catalysis: bioPax.getElementMap().get(interaction).getParams().get("controlled")) {
+					addPhysicalEntities(catalysis, pathway, onlyIDs);
+				}
+			}
+		}
+		else if(type.equalsIgnoreCase("BiochemicalReaction") || type.equalsIgnoreCase("ComplexAssembly") || type.equalsIgnoreCase("Degradation") || type.equalsIgnoreCase("Transport") || type.equalsIgnoreCase("TransportWithBiochemicalReaction")) {
+			if(bioPax.getElementMap().get(interaction).getParams().get("left-id") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("left-id"));
+			}
+			if(bioPax.getElementMap().get(interaction).getParams().get("right-id") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("right-id"));
+			}
+			if(bioPax.getElementMap().get(interaction).getParams().get("participant") != null) {
+				tempList.addAll(bioPax.getElementMap().get(interaction).getParams().get("participant"));
+			}
+		}
+		
+		if(onlyIDs) {
+			for(String entity: tempList) {
+				pathway.allEntitiesIDs.add(entity);
+			}
+		}
+		else {
+			for(String entity: tempList) {
+				if(bioPax.getElementMap().get(entity) != null) {
+					String entityType = bioPax.getElementMap().get(entity).getBioPaxClassName();
+					Map<String, List<String>> params = bioPax.getElementMap().get(entity).getParams();
+					pathway.physicalEntities.add(new PhysicalEntity(entity, entityType, params));
+					
+					pathway.allEntitiesIDs.add(entity);					
+				}
+			}
+		}
+	}
+	
+//	@Test
+	public void Test0() {
+//		String filename = "/mnt/commons/formats/reactome/Homo sapiens.owl";
+//		
+//		try {
+//			BioPaxParser parser = new BioPaxParser(filename);
+//			bioPax = parser.parse();
+//			
+//			visitNode("Dissociation_of_beta_catenin_from_Axin_and_association_of_beta_catenin_with_phospho__20_aa__APC_in_the_detruction_complex", "");
+//
+//			String name = "Signaling_by_Wnt";
+//			//name = "Degradation_of_beta_catenin_by_the_destruction_complex";
+//			
+//			System.out.println("************** " + bioPax.getElementMap().get(name).getBioPaxClassName() + " : " + bioPax.getElementMap().get(name).getId());
+//
+//			List<String> componentIds = getComponents(name, "");
+//			System.out.println("componentIds = " + componentIds.size());
+//			for(String id: componentIds) {
+//				System.out.println("**** " + bioPax.getElementMap().get(id).getBioPaxClassName() + " : " + bioPax.getElementMap().get(id).getId());
+//			}
 
 			//			BioPaxElement e = bioPax.getElementMap().get(name);
 			//			if ("pathway".equalsIgnoreCase(e.getBioPaxClassName())) {
@@ -119,12 +317,12 @@ public class BioPaxParserTest {
 			//			}
 			//displayEntity(bioPax, name, "*****");
 
-			//System.out.println(bioPax.toString());
-			System.out.println("\n------------------------------------");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//			//System.out.println(bioPax.toString());
+//			System.out.println("\n------------------------------------");
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public List<String> getComponents(String name, String tab) {
@@ -477,7 +675,7 @@ public class BioPaxParserTest {
 		}
 	}
 
-	@Test
+//	@Test
 	public void Test12() {
 		String filename = "/mnt/commons/formats/reactome/Homo sapiens.owl";
 		try {
