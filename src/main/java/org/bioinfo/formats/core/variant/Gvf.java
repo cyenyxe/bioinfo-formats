@@ -1,5 +1,7 @@
 package org.bioinfo.formats.core.variant;
 
+import java.util.List;
+
 public class Gvf {
 
 	private String sequenceId;
@@ -10,6 +12,11 @@ public class Gvf {
 	private String score;
 	private String strand;
 	private String frame;
+	
+	private String id;
+	private String Reference_seq;
+	private String Variant_seq;
+	private List<String> variantEffects;
 	
 	
 }
