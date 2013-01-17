@@ -18,14 +18,17 @@ import org.bioinfo.formats.parser.uniprot.v135jaxb.FeatureType;
 import org.bioinfo.formats.parser.uniprot.v135jaxb.Uniprot;
 import org.junit.Test;
 
+import com.google.gson.Gson;
+
 public class UniprotParserTest {
 
 	@Test
 	public void getNamesAndFunctionFromUniprot() {
 
-		String chunksDirname = "/mnt/commons/formats/uniprot/chunks/";
-		String outFilename = "/mnt/commons/formats/uniprot/names_and_function_uniprot.txt";
+		String chunksDirname = "/home/imedina/Downloads/uniprot_sprot/chunks/";
+		String outFilename = "/tmp/names_and_function_uniprot.txt";
 
+		Gson gson = new Gson();
 		UniprotParser up = new UniprotParser();
 
 		try {
@@ -43,9 +46,10 @@ public class UniprotParserTest {
 
 				System.out.println("searching in " + file.getAbsolutePath() + "...");
 
-				uniprot = (Uniprot) up.loadXMLInfo(file.getAbsolutePath());
+				uniprot = (Uniprot) up.loadXMLInfo(file.getAbsolutePath(), UniprotParser.UNIPROT_CONTEXT_v135);
 				for(Entry entry: uniprot.getEntry()) {
 					//System.out.println("accession = " + entry.getAccession().get(0));
+					System.out.println(gson.toJson(entry));
 					name = "";
 					proteinName = "";
 					geneName = "";
