@@ -1,6 +1,8 @@
 package org.bioinfo.formats.parser.biopax;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bioinfo.commons.utils.StringUtils;
 import org.dom4j.Namespace;
@@ -43,6 +45,7 @@ public class BioPaxConstants {
 	public static final List<String> BIOPAX_INTERACTION_LIST = StringUtils.toList("Interaction,Control,Catalysis,Modulation,TemplateReactionRegulation,Conversion,BiochemicalReaction,ComplexAssembly,Degradation,Transport,TransportWithBiochemicalReaction,GeneticInteraction,MolecularInteraction,TemplateReaction");
 	public static final List<String> BIOPAX_PATHWAY_LIST = StringUtils.toList("Pathway");
 	public static final List<String> BIOPAX_PHYSICAL_ENTITY_LIST = StringUtils.toList("PhysicalEntity,Complex,DNA,DNARegion,Protein,RNA,RNARegion,SmallMolecule");
+	public static final Set<String> BIOPAX_PHYSICAL_ENTITY_SET = new HashSet<String>(StringUtils.toList("PhysicalEntity,Complex,DNA,DNARegion,Dna,Protein,RNA,RNARegion,Rna,SmallMolecule"));
 
 	public static final List<String> BIOPAX_UTILITY_LIST = StringUtils.toList("UtilityClass,BioSource,ChemicalStructure,ControlledVocabulary,DeltaG,EntityFeature,EntityReference,Evidence,ExperimentalForm,kPrime,PathwayStep,Provenance,Score,SequenceLocation,Stoichiometry,Xref," +
 																			  "CellularLocationVocabulary,CellVocabulary,EntityReferenceTypeVocabulary,EvidenceCodeVocabulary,ExperimentalFormVocabulary,InteractionVocabulary,PhenotypeVocabulary,RelationshipTypeVocabulary,SequenceModificationVocabulary,SequenceRegionVocabulary,TissueVocabulary," +
@@ -65,7 +68,7 @@ public class BioPaxConstants {
 	}
 
 	public static boolean isPhysicalEntity(String name) {
-		return BIOPAX_PHYSICAL_ENTITY_LIST.contains(name);
+		return BIOPAX_PHYSICAL_ENTITY_SET.contains(name);
 	}
 
 	public static boolean isUtility(String name) {
