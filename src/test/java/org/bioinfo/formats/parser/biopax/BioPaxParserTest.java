@@ -1,6 +1,5 @@
 package org.bioinfo.formats.parser.biopax;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,17 +10,6 @@ import org.bioinfo.commons.utils.ListUtils;
 //import org.bioinfo.infrared.lib.common.Interaction;
 //import org.bioinfo.infrared.lib.common.PhysicalEntity;
 //import org.bioinfo.infrared.lib.common.SubPathway;
-import org.bson.BSON;
-import org.bson.BSONObject;
-import org.junit.Test;
-
-import com.google.gson.Gson;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.util.JSON;
 
 
 public class BioPaxParserTest {
