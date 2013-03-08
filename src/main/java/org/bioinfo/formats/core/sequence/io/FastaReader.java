@@ -38,8 +38,12 @@ public class FastaReader extends AbstractFormatReader<Fasta> {
 			try {
 				// Read Id and Desc
 				String idLine = this.readIdLine();
-				String id = idLine.split("\\s")[0].substring(1);
-				String desc = idLine.substring(id.length()+1);
+				String[] fields = idLine.split("\\s");
+				String id = fields[0].substring(1);
+				String desc = "";
+				if(fields.length > 1) {
+					desc = fields[1];					
+				}
 
 				// Read Sequence
 				StringBuilder sequenceBuilder = this.readSequenceLines();
