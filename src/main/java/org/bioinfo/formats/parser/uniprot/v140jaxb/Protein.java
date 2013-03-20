@@ -93,7 +93,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "sequence"
 })
 @XmlRootElement(name = "entry")
-public class Entry {
+public class Protein {
 
     @XmlElement(required = true)
     protected List<String> accession;
@@ -101,7 +101,7 @@ public class Entry {
     protected List<String> name;
     @XmlElement(required = true)
     protected ProteinType protein;
-    protected List<Entry.Gene> gene;
+    protected List<Protein.Gene> gene;
     @XmlElement(required = true)
     protected OrganismType organism;
     protected List<OrganismType> organismHost;
@@ -229,13 +229,13 @@ public class Entry {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Entry.Gene }
+     * {@link Protein.Gene }
      * 
      * 
      */
-    public List<Entry.Gene> getGene() {
+    public List<Protein.Gene> getGene() {
         if (gene == null) {
-            gene = new ArrayList<Entry.Gene>();
+            gene = new ArrayList<Protein.Gene>();
         }
         return this.gene;
     }

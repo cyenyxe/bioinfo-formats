@@ -401,11 +401,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Entry.Gene }
+     * Create an instance of {@link Protein.Gene }
      * 
      */
-    public Entry.Gene createEntryGene() {
-        return new Entry.Gene();
+    public Protein.Gene createEntryGene() {
+        return new Protein.Gene();
     }
 
     /**
@@ -425,11 +425,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Entry }
+     * Create an instance of {@link Protein }
      * 
      */
-    public Entry createEntry() {
-        return new Entry();
+    public Protein createEntry() {
+        return new Protein();
     }
 
     /**

@@ -65,11 +65,13 @@
 		</plugins>
 	</build>
 
-	<distributionManagement>
-		<repository>
-			<id>default</id>
-			<name>Bioinfo Repository</name>
-			<url>scp://repos/var/local/commons/repository</url>
-		</repository>
-	</distributionManagement>
+        <distributionManagement>
+                <repository>
+                        <id>default</id>
+                        <name>Bioinfo Repository</name>
+<!--                        <url>http://repos.bioinfo.cipf.es/maven2/</url> -->
+                        <url>scp://repos/var/www/gitorious/public/maven2</url>
+                </repository>
+        </distributionManagement>
+
 </project>

@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
 public class Uniprot {
 
     @XmlElement(required = true)
-    protected List<Entry> entry;
+    protected List<Protein> entry;
     protected String copyright;
 
     /**
@@ -67,13 +67,13 @@ public class Uniprot {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Entry }
+     * {@link Protein }
      * 
      * 
      */
-    public List<Entry> getEntry() {
+    public List<Protein> getEntry() {
         if (entry == null) {
-            entry = new ArrayList<Entry>();
+            entry = new ArrayList<Protein>();
         }
         return this.entry;
     }

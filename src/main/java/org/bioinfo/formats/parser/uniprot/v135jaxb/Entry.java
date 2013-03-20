@@ -231,7 +231,7 @@ public class Entry {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Entry.Gene }
+     * {@link Protein.Gene }
      * 
      * 
      */

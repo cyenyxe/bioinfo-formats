@@ -337,7 +337,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Entry.Gene }
+     * Create an instance of {@link Protein.Gene }
      * 
      */
     public Entry.Gene createEntryGene() {
@@ -409,7 +409,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Entry }
+     * Create an instance of {@link Protein }
      * 
      */
     public Entry createEntry() {

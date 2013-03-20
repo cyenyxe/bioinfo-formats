@@ -289,7 +289,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Entry }
+     * Create an instance of {@link Protein }
      * 
      */
     public Entry createEntry() {
