@@ -31,8 +31,8 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/main</sourceDirectory>
-		<testSourceDirectory>src/test</testSourceDirectory>
+<!--		<sourceDirectory>src/main</sourceDirectory>
+		<testSourceDirectory>src/test</testSourceDirectory>-->
 
 		<extensions>
 			<extension>
